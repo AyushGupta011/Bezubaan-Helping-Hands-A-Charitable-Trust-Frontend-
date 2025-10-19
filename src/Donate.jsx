@@ -35,69 +35,81 @@ const Donate = () => {
     
     setLoading(true);
 
-    const ok = await loadRazorpay();
-    if (!ok) {
-      setLoading(false);
-      alert("Failed to load payment gateway. Check your internet.");
-      return;
-    }
-
-    try {
-      // 1) Create order on backend
-      const { data } = await axios.post(`${API}/donations/order`, {
-        name: form.name,
-        email: form.email,
-        amount: Number(form.amount),
-        message: form.message,
-      });
-
-      const options = {
-        key: data.key,
-        amount: data.amount,           // in paise
-        currency: data.currency,
-        name: "Bezubaan Animal Welfare",
-        description: "Donation",
-        order_id: data.orderId,
-        prefill: {
-          name: form.name,
-          email: form.email,
-        },
-        notes: { message: form.message },
-        theme: { color: "#16a34a" },
-        handler: async function (response) {
-          // 2) Verify on backend
-          try {
-            await axios.post(`${API}/donations/verify`, {
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature,
-            });
-            alert("Thank you for your donation! 🐾");
-            setForm({ name: "", email: "", amount: "", message: "" });
-            const newDonation ={...form, date:new Date().toLocaleString()};
-    setDonations([...donate,newDonation])
-
-          } catch {
-            alert("Payment captured, but verification failed. We’ll review it.");
-          }
-        },
-        modal: {
-          ondismiss: function () {
-            setLoading(false);
-          },
-        },
+//mock payment success after 1.5 seconds
+      setTimeout(() => {
+      alert("✅ Thank you for your generous donation! 🐾");
+      const newDonation = {
+        ...form,
+        date: new Date().toLocaleString(),
       };
-
-      const rzp = new window.Razorpay(options);
-      rzp.on("payment.failed", function () {
-        setLoading(false);
-        alert("Payment failed. Please try again.");
-      });
-      rzp.open();
-    } catch (e) {
-      alert(e?.response?.data?.message || "Could not start payment.");
+      setDonations([...donations, newDonation]);
+      setForm({ name: "", email: "", amount: "", message: "" });
       setLoading(false);
-    }
+    }, 1500);
+
+  //   const ok = await loadRazorpay();
+  //   if (!ok) {
+  //     setLoading(false);
+  //     alert("Failed to load payment gateway. Check your internet.");
+  //     return;
+  //   }
+
+  //   try {
+  //     // 1) Create order on backend
+  //     const { data } = await axios.post(`${API}/donations/order`, {
+  //       name: form.name,
+  //       email: form.email,
+  //       amount: Number(form.amount),
+  //       message: form.message,
+  //     });
+
+  //     const options = {
+  //       key: data.key,
+  //       amount: data.amount,           // in paise
+  //       currency: data.currency,
+  //       name: "Bezubaan Animal Welfare",
+  //       description: "Donation",
+  //       order_id: data.orderId,
+  //       prefill: {
+  //         name: form.name,
+  //         email: form.email,
+  //       },
+  //       notes: { message: form.message },
+  //       theme: { color: "#16a34a" },
+  //       handler: async function (response) {
+  //         // 2) Verify on backend
+  //         try {
+  //           await axios.post(`${API}/donations/verify`, {
+  //             razorpay_order_id: response.razorpay_order_id,
+  //             razorpay_payment_id: response.razorpay_payment_id,
+  //             razorpay_signature: response.razorpay_signature,
+  //           });
+  //           alert("Thank you for your donation! 🐾");
+  //           setForm({ name: "", email: "", amount: "", message: "" });
+  //           const newDonation ={...form, date:new Date().toLocaleString()};
+  //   setDonations([...donate,newDonation])
+
+  //         } catch {
+  //           alert("Payment captured, but verification failed. We’ll review it.");
+  //         }
+  //       },
+  //       modal: {
+  //         ondismiss: function () {
+  //           setLoading(false);
+  //         },
+  //       },
+  //     };
+
+  //     const rzp = new window.Razorpay(options);
+  //     rzp.on("payment.failed", function () {
+  //       setLoading(false);
+  //       alert("Payment failed. Please try again.");
+  //     });
+  //     rzp.open();
+  //   } catch (e) {
+  //     alert(e?.response?.data?.message || "Could not start payment.");
+  //     setLoading(false);
+  //   }
   };
 
   return (
@@ -131,8 +143,12 @@ const Donate = () => {
       </div>
    
     <div className="donate-form bg-gray-200 flex flex-col  p-6">
+        <h4 className="text-l mb-4">Donate via QR & Submit Form</h4>
+        <img src="/assets/" alt="" />
+     
       <form onSubmit={payNow} className="rounded-2xl flex flex-col gap-5 p-8">
         <h2 className="text-2xl font-bold text-black mb-6">Donate to Bezubaan 🐶</h2>
+         
 
         <label className="block text-sm mb-1">Name</label>
         <input name="name" value={form.name} onChange={onChange}
@@ -157,9 +173,9 @@ const Donate = () => {
       </form>
     </div>
     {/* card section */}
-    <div className="donation-card">
+    <div className="donation-card ">
       <h2 className="text-lg font-bold mb-2">Recent Donations</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="card-content grid grid-cols-1 md:grid-cols-3 gap-4">
         {donations.map((don, index) => (
           <div
             key={index}

@@ -508,6 +508,63 @@ input[type="file"]::file-selector-button {
   border-radius: 2rem;
   gap: 3rem;
 }
+
+.donation-card {
+  width: 100%;
+  height: 100%;
+  padding: 4rem;
+  align-items: center;
+  margin: auto;
+}
+.donation-card h2 {
+  text-align: center;
+  font-size: 2rem;
+  font-family: 'Times New Roman', Times, serif;
+  text-transform: uppercase;
+  margin-bottom: 2rem;
+}
+.card-content {
+  display: grid;
+ 
+}
+.card-content div{
+  width: 50rem;
+  height: 10rem;
+  padding: 1rem;
+  border: 1px solid #eee;
+  text-align: center;
+  border-radius: 1rem;
+  background-color: #e5e7eb;
+}
+.card-content div:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: box-shadow 0.3s ease-in-out;
+}
+.card-content div h3{
+  font-size: 1.8rem;
+  margin-bottom: 0.5rem;
+}
+.card-content div p{
+  font-size: 1.3rem;
+  color: #6c757d;
+}
+
+
+.donation-card .donation-item {
+  background-color: #f8f9fa;
+  padding: 1rem;
+  border-radius: 1rem;
+  text-align: center;
+}
+.donation-card .donation-item h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+.donation-card .donation-item p {
+  font-size: 1.2rem;
+  color: #6c757d;
+}
+
 /* volunteer section */
 
 .volunteer-container {
@@ -1187,6 +1244,23 @@ font-weight: 600;
 .contact-map{
   padding-top: 5rem;
 }
+.contact-page1{
+
+  padding-top: 5rem;
+padding: 2rem;
+}
+.contact-page1 h1{
+  padding-top: 1.8rem;
+  
+  text-align: center;
+  font-size: 2rem;
+  line-height: 1.3;
+}
+.contact-page1 p{
+  text-align: center;
+  font-size: 1.2rem;
+  line-height: 2;
+}
 .contact-page2 input{
   width: 20rem;
   align-self: center;
@@ -1362,6 +1436,83 @@ input[type="file"]::file-selector-button {
   border-radius: 3rem;
 padding: 1.5rem;
     object-fit: cover;
+}
+.volunteer-container {
+  width: 100%;
+  height: 100%;
+  
+}
+.volunteer-page1{
+  width: 100%;
+  height: 100%;
+  padding: 3rem;
+
+}
+.volunteer-content{
+
+}
+.volunteer-container h2{
+  padding: 2rem;
+  text-align: center;
+  font-size: 1.8rem;
+  font-family: 'Times New Roman', Times, serif;
+  text-transform: uppercase;
+}
+.volunteer-container p{
+  text-align: center;
+  font-size: 1.5rem;  
+  padding: 1rem;
+  line-height: 3;
+  font-family: 'Times New Roman', Times, serif;
+}
+.volunteer-form {
+  font-family: 'Times New Roman', Times, serif;
+  width: 20rem;
+  height: 100%;
+  padding: 3rem;
+  align-items: center;
+  margin: auto;
+}
+.volunteer-form h2{
+  text-align: center;
+  font-size: 4rem;
+  font-family: 'Times New Roman', Times, serif;
+  text-transform: uppercase;
+  padding-bottom: 4rem;
+}
+
+.volunteer-form label{
+ align-self: flex-start;
+ padding-left: 10rem;
+ text-align: center;
+ align-self: center;
+  font-size:1.5rem;
+}
+.volunteer-form input, .volunteer-form textarea{
+  width: 20rem;
+  padding-top: 1rem;
+  border-radius: 2rem;
+  font-size: 1.2rem;
+
+
+  font-family: 'Times New Roman', Times, serif;
+  text-align: center;
+}
+.volunteer-form select{
+  width: 20rem;
+  padding-top: 1rem;
+  border-radius: 2rem;
+  font-size: 1.2rem;
+
+  font-family: 'Times New Roman', Times, serif;
+  text-align: center;
+}
+.volunteer-form button{
+  width: 20rem;
+  height: 3rem;
+  border-radius: 2rem;
+  gap: 3rem;
+  align-self: center;
 }
 
 .footer{

@@ -34,7 +34,7 @@ const Volunteer = () => {
   };
 
   return (
-    <div className="bg-gray-200 py-12 px-4">
+    <div className="bg-gray-200 py-12 px-4 ">
       <div className="volunteer-page1 h-full w-full p-20">
          <div className="volunteer-content text-center flex flex-col items-center justify-center gap-20 px-4  py-12">
         {/* Heading */}
@@ -43,7 +43,7 @@ const Volunteer = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-4xl md:text-5xl font-bold text-black mb-4"
+          className="text-4xl md:text-5xl sm:text-4xl font-bold text-black mb-4"
         >
           Join Our Volunteer Family
         </motion.h1>
@@ -67,33 +67,37 @@ const Volunteer = () => {
           viewport={{ once: true }}
           className="grid grid-cols-1 md:grid-cols-2 gap-6"
         >
-          <div className="bg-white p-6 rounded-lg shadow h-[200px] hover:shadow-lg transition">
+          <motion.div   animate={{ y: [0, -10, 0, 10, 0] }}  // up-down animation
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="bg-white p-6 rounded-lg shadow text-center h-[200px] hover:shadow-lg transition">
             <h3 className="text-xl font-semibold mb-2">Feeding Animals</h3>
             <p className="text-gray-600">
               Help provide nutritious food to street animals in different areas, ensuring no animal goes hungry.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="bg-white p-6 rounded-lg shadow  hover:shadow-lg transition">
+          <motion.div  animate={{ y: [0, -10, 0, 10, 0] }}  // down-up animation
+  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="bg-white p-6 rounded-lg shadow text-center h-[200px] hover:shadow-lg transition">
             <h3 className="text-xl font-semibold mb-2">Rescue Operations</h3>
             <p className="text-gray-600">
               Participate in rescue missions to save injured or abandoned animals and take them to safety or clinics.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="bg-white p-6 rounded-lg shadow h-[200px] hover:shadow-lg transition">
+          <motion.div   animate={{ y: [0, -10, 0, 10, 0] }}  // left-right animation
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="bg-white p-6 rounded-lg shadow text-center h-[200px] hover:shadow-lg transition">
             <h3 className="text-xl font-semibold mb-2">Awareness Campaigns</h3>
             <p className="text-gray-600">
               Spread awareness about animal welfare through workshops, campaigns, and social media.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="bg-white p-6 rounded-lg shadow h-[200px]  hover:shadow-lg transition">
+          <motion.div   animate={{ y: [0, -10, 0, 10, 0] }}  // up-down animation
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="bg-white p-6 rounded-lg shadow text-center h-[200px] hover:shadow-lg transition">
             <h3 className="text-xl font-semibold mb-2">Fundraising & Support</h3>
             <p className="text-gray-600">
               Help us raise funds and gather resources to support our rescue, feeding, and medical programs.
             </p>
-          </div>
+          </motion.div>
         </motion.div>
 
         {/* Call-to-action */}
@@ -114,7 +118,7 @@ const Volunteer = () => {
           Join us in helping street animals. Fill out the form below to volunteer.
         </p>
 
-        <form onSubmit={handleSubmit} className=" volunteer-form flex flex-col gap-10 p-8 rounded-lg shadow-md space-y-6">
+        <form onSubmit={handleSubmit} className=" volunteer-form flex items-center flex-col gap-10 p-8 rounded-lg ">
           <input
             type="text"
             name="name"
