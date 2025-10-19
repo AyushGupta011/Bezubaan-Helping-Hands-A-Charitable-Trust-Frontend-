@@ -23,73 +23,48 @@ const Contact = () => {
   };
 
   return (
-    <div>
-        <div className="contact-page1">
-           <motion.div
-        initial={{ opacity: 0, y: -30 }}
+    <div className="bg-gray-200 py-12 h-full w-full px-4">
+        <div className="contact-page1 w-full h-full flex flex-col items-center justify-center gap-20 ">
+          <motion.div
+        initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
         className="text-center max-w-3xl"
       >
-        <h1 className="text-4xl md:text-5xl font-bold text-orange-500 mb-4">
-          Connect with Bezubaan
+        <h1 className="text-4xl md:text-5xl font-bold text-black mb-4">
+          Contact Bezubaan NGO
         </h1>
-        <p className="text-gray-700 text-lg mb-8">
-          We are passionate about saving street animals. Follow us, donate, or volunteer — every action makes a difference. Stay updated and join our mission!
+        <p className="text-gray-700 text-lg mb-6">
+          Bezubaan NGO is a dedicated organization working to **rescue, rehabilitate, and protect street animals**. Our mission is to create a safer and healthier environment for animals who cannot speak for themselves.
         </p>
-        <div className="flex justify-center gap-6 text-orange-500 text-2xl">
-          <motion.a
-            href="https://facebook.com/bezubaan"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.2, rotate: 10 }}
-            transition={{ type: "spring", stiffness: 300 }}
-            className="hover:text-orange-600"
-          >
-            <i className="fab fa-facebook-f"></i>
-          </motion.a>
-          <motion.a
-            href="https://instagram.com/bezubaan"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.2, rotate: 10 }}
-            transition={{ type: "spring", stiffness: 300 }}
-            className="hover:text-orange-600"
-          >
-            <i className="fab fa-instagram"></i>
-          </motion.a>
-          <motion.a
-            href="https://twitter.com/bezubaan"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.2, rotate: 10 }}
-            transition={{ type: "spring", stiffness: 300 }}
-            className="hover:text-orange-600"
-          >
-            <i className="fab fa-twitter"></i>
-          </motion.a>
-          <motion.a
-            href="https://youtube.com/bezubaan"
-            target="_blank"
-            rel="noopener noreferrer"
-            whileHover={{ scale: 1.2, rotate: 10 }}
-            transition={{ type: "spring", stiffness: 300 }}
-            className="hover:text-orange-600"
-          >
-            <i className="fab fa-youtube"></i>
-          </motion.a>
-        </div>
+      </motion.div>
+
+      {/* About Bezubaan Section */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.3, duration: 0.6 }}
+        viewport={{ once: true }}
+        className="text-center max-w-4xl mt-8"
+      >
+
+        <p className="text-gray-700 mb-4">
+          Founded with the vision of giving voice to the voiceless, Bezubaan NGO focuses on providing **medical care, food, shelter, and protection** to stray animals. We conduct rescue operations for injured or abandoned animals, run awareness campaigns, and collaborate with communities to promote responsible pet ownership.
+        </p>
+        <p className="text-gray-700 mb-4">
+          Over the years, we have helped thousands of animals across multiple cities. Our volunteers play a critical role in feeding, rescuing, and rehabilitating animals, and we rely on community support to sustain our initiatives.
+        </p>
+        <p className="text-gray-700">
+          Whether you want to **volunteer, donate, or report a case of animal cruelty**, we encourage you to reach out. Every small effort helps us save lives and spread compassion.
+        </p>
       </motion.div>
 
 
 
         </div>
         <section className="contact-page2">
-      <motion.h2 initial={{opacity:0,y:-20}}
-          whileInView={{opacity:1,y:0}}
-          transition={{delay:0.3 , duration:0.5}}
-          viewport={{once:true}} className="text-3xl font-bold text-center mb-4">Contact Us</motion.h2>
+   
       <motion.p initial={{opacity:0,y:-20}}
           whileInView={{opacity:1,y:0}}
           transition={{delay:0.3 , duration:0.5}}
@@ -143,7 +118,7 @@ const Contact = () => {
           initial={{opacity:0}}
           whileInView={{opacity:1,y:0}}
           transition={{delay:0.3 , duration:0.5}}
-          viewport={{once:false}}
+          viewport={{once:true}}
           className="p-3 bg-white text-black rounded-lg text-lg hover:bg-black hover:text-white transition border-2"
         >
           Send Message

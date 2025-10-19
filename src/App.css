@@ -515,6 +515,12 @@ input[type="file"]::file-selector-button {
   height: 100%;
   
 }
+.volunteer-page1{
+  width: 100%;
+  height: 100%;
+  padding: 10rem;
+
+}
 .volunteer-container h2{
   padding: 1rem;
   text-align: center;
@@ -578,6 +584,47 @@ input[type="file"]::file-selector-button {
   gap: 3rem;
   align-self: center;
 }
+.contact-page1 {
+  width: 100%;
+  height: 100%;
+
+}
+.contact-page1 h1{
+  padding-top: 10rem;
+  padding: 1rem;
+  text-align: center;
+  font-size: 2.5rem;
+  font-family: 'Times New Roman', Times, serif;
+  text-transform: uppercase;
+}
+.contact-page1 p{
+  text-align: center;
+  font-size: 1.5rem;
+  font-family: 'Times New Roman', Times, serif;
+
+}
+.report-page1 {
+  width: 100%;
+  height: 100%;
+  padding: 3rem;
+
+}
+.report-page1 h1{
+  padding-top: 5rem;
+  padding: 1rem;
+  text-align: center;
+  font-size: 2.5rem;
+  font-family: 'Times New Roman', Times, serif;
+  text-transform: uppercase;
+}
+.report-page1 p{
+  text-align: center;
+  font-size: 1.5rem;
+  font-family: 'Times New Roman', Times, serif;
+
+}
+
+
 /* footer section */
 
 .footer {

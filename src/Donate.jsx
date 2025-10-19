@@ -102,7 +102,7 @@ const Donate = () => {
 
   return (
     <div className="donate-container">
-      <div className="donate-page1 flex flex-col gap-10  bg-gray-50">
+      <div className="donate-page1 flex flex-col gap-10  bg-gray-200">
         <h2 className="text-2xl font-bold text-black p-20">Celebrate Your Birthday with Bezubaan 🐶 </h2>
         <p className="">Make your special day even more meaningful by sharing it with those who need your love the most – our rescued street animals. ❤️
           <br />
@@ -130,7 +130,7 @@ const Donate = () => {
 
       </div>
    
-    <div className="donate-form bg-gray-50 flex flex-col  p-6">
+    <div className="donate-form bg-gray-200 flex flex-col  p-6">
       <form onSubmit={payNow} className="rounded-2xl flex flex-col gap-5 p-8">
         <h2 className="text-2xl font-bold text-black mb-6">Donate to Bezubaan 🐶</h2>
 

@@ -34,9 +34,9 @@ const Volunteer = () => {
   };
 
   return (
-    <div className="bg-gray-50 py-12 px-4">
+    <div className="bg-gray-200 py-12 px-4">
       <div className="volunteer-page1 h-full w-full p-20">
-         <div className=" text-center flex flex-col items-center justify-center gap-20 px-4  py-12">
+         <div className="volunteer-content text-center flex flex-col items-center justify-center gap-20 px-4  py-12">
         {/* Heading */}
         <motion.h1
           initial={{ opacity: 0, y: -20 }}
@@ -114,14 +114,14 @@ const Volunteer = () => {
           Join us in helping street animals. Fill out the form below to volunteer.
         </p>
 
-        <form onSubmit={handleSubmit} className="bg-white volunteer-form flex flex-col gap-10 p-8 rounded-lg shadow-md space-y-6">
+        <form onSubmit={handleSubmit} className=" volunteer-form flex flex-col gap-10 p-8 rounded-lg shadow-md space-y-6">
           <input
             type="text"
             name="name"
             value={formData.name}
             onChange={handleChange}
             placeholder="Full Name *"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
+            className="w-full px-4 py-2 border border-black rounded-md focus:ring-2 focus:ring-black"
             required
           />
 
@@ -131,7 +131,7 @@ const Volunteer = () => {
             value={formData.email}
             onChange={handleChange}
             placeholder="Email *"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
+            className="w-full px-4 py-2 border border-black rounded-md focus:ring-2 focus:ring-black"
             required
           />
 
@@ -141,7 +141,7 @@ const Volunteer = () => {
             value={formData.phone}
             onChange={handleChange}
             placeholder="Phone *"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
+            className="w-full px-4 py-2 border border-black rounded-md focus:ring-2 focus:ring-black"
             required
           />
 
@@ -149,7 +149,7 @@ const Volunteer = () => {
             name="role"
             value={formData.role}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
+            className="w-full px-4 py-2 border border-black rounded-md focus:ring-2 focus:ring-black"
             required
           >
             <option value="">Select a Role *</option>
@@ -165,7 +165,7 @@ const Volunteer = () => {
             value={formData.availability}
             onChange={handleChange}
             placeholder="Availability *"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
+            className="w-full px-4 py-2 border border-black rounded-md focus:ring-2 focus:ring-black"
             required
           />
 
@@ -175,7 +175,7 @@ const Volunteer = () => {
             onChange={handleChange}
             rows="4"
             placeholder="Message / Notes"
-            className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-black"
+            className="w-full px-4 py-2 border border-black rounded-md focus:ring-2 focus:ring-black"
           ></textarea>
 
           <button

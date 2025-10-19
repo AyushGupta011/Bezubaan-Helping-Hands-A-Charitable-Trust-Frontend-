@@ -67,7 +67,7 @@ const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ delay:.1, duration: 0.3 }}
-         className='mobile-menu md:hidden  flex flex-col gap-3 mt-4 text-center text-white px-40 py-4 bg-black rounded-2xl shadow-lg'>
+         className='mobile-menu md:hidden z-9999  flex flex-col gap-3 mt-4 text-center text-white  bg-black rounded-2xl shadow-lg'>
           <Link to="/" onClick={toggleMenu}><div className="mobile-menu-list"><h3>Home</h3></div></Link>
           <Link to="/about" onClick={toggleMenu}><div className="mobile-menu-list"><h3>About Us</h3></div></Link>
           <Link to="/report" onClick={toggleMenu}><div className="mobile-menu-list"><h3>Report Cruelty</h3></div></Link>
