@@ -84,7 +84,7 @@ const Report = () => {
   };
 
   return (
-    <div className="bg-gray-200 py-12 px-4 py-16 px-4 flex flex-col justify-center items-center ">
+    <div className="bg-gray-200 py-16 px-4 flex flex-col justify-center items-center ">
         <div className="report-page1 flex flex-col justify-center items-center gap-20 w-full ">
             <motion.div
         initial={{ opacity: 0, y: -20 }}

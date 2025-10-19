@@ -18,7 +18,7 @@ export default function PawCursor() {
         }}
       >
         <img
-          src="src/assets/paw.png"
+          src="/assets/paw.png"
           alt="paw"
           className="w-5 h-5"
           style={{ transform: "translate(-50%, -50%)" }}

@@ -15,13 +15,13 @@ body {
   /* background-color: #fff8f0; */
   color: #333;
   cursor: none;
-  background: url("src/assets/background.jpg");
+  background: url("/assets/background.jpg");
 }
 /* .section-container{
   background:url("src/assets/background.jpg");
 } */
 .navbar-container{
-   background: url("src/assets/background.jpg");
+   background: url("/assets/background.jpg");
   padding-right: 3rem;
   width: 100%;
 }
@@ -82,7 +82,7 @@ padding-left: 5rem;
 
 /* hero section */
 .hero-wrapper {
-   background: url("src/assets/background.jpg");
+   background: url("/assets/background.jpg");
   position: relative;
   width: 100%;
   height: 100vh;

@@ -58,7 +58,7 @@ Your small act of kindness can bring a world of difference to the lives of these
           viewport={{ once: true}}
 
 className="home-page2-img md:w-1/3 w-full ">
-  <img className="w-full sm:w-1/2 md:w-1/3 mx-auto h-auto object-cover rounded shadow-lg" src="/src/assets/founder.jpeg" alt="" />
+  <img className="w-full sm:w-1/2 md:w-1/3 mx-auto h-auto object-cover rounded shadow-lg" src="/assets/founder.jpeg" alt="" />
 </motion.div>
 
         </div>
@@ -102,7 +102,7 @@ className="home-page2-img md:w-1/3 w-full ">
           
           
            className="work-img">
-            <img src="src/assets/work7.jpeg" alt="" />
+            <img src="/assets/work7.jpeg" alt="" />
 
           </motion.div>
 
@@ -113,13 +113,13 @@ className="home-page2-img md:w-1/3 w-full ">
             whileInView={{opacity:1,x:0}}
              transition={{ delay:0.3, duration: 0.5 }}
           viewport={{ once: false}} className="img-left ">
-            <img src="src/assets/work5.jpeg" alt="" />
+            <img src="/assets/work5.jpeg" alt="" />
           </motion.div>
            <motion.div initial={{opacity:0,x:40}}
             whileInView={{opacity:1,x:0 }}
              transition={{ delay:0.3, duration: 0.5 }}
           viewport={{ once: false}} className="img-right rounded-2xl overflow-hidden">
-          <video className='w-full h-full object-cover rounded-2xl' src="src/assets/work10.mp4" autoPlay muted loop ></video>
+          <video className='w-full h-full object-cover rounded-2xl' src="/assets/work10.mp4" autoPlay muted loop ></video>
         </motion.div>
 
             <motion.div initial={{opacity:0,x:-40}}
@@ -128,7 +128,7 @@ className="home-page2-img md:w-1/3 w-full ">
           viewport={{ once: false}}
             
             className="img-left ">
-            <img src="src/assets/work5.jpeg" alt="" />
+            <img src="/assets/work5.jpeg" alt="" />
           </motion.div>
 
           </div>
@@ -138,19 +138,19 @@ className="home-page2-img md:w-1/3 w-full ">
             whileInView={{opacity:1,x:0}}
              transition={{ delay:0.3, duration: 0.5 }}
           viewport={{ once: true}} className="img-right rounded-2xl overflow-hidden">
-          <video className='w-full h-full object-cover rounded-2xl' src="src/assets/work10.mp4" autoPlay muted loop ></video>
+          <video className='w-full h-full object-cover rounded-2xl' src="/assets/work10.mp4" autoPlay muted loop ></video>
         </motion.div>
                                <motion.div initial={{opacity:0,x:-40}}
             whileInView={{opacity:1,x:0}}
              transition={{ delay:0.3, duration: 0.5 }}
           viewport={{ once: true}} className="img-left ">
-            <img src="src/assets/work5.jpeg" alt="" />
+            <img src="/assets/work5.jpeg" alt="" />
           </motion.div>
             <motion.div initial={{opacity:0,x:40}}
             whileInView={{opacity:1,x:0}}
              transition={{ delay:0.3, duration: 0.5 }}
           viewport={{ once: true}} className="img-right rounded-2xl overflow-hidden">
-          <video className='w-full h-full object-cover rounded-2xl' src="src/assets/work10.mp4" autoPlay muted loop ></video>
+          <video className='w-full h-full object-cover rounded-2xl' src="/assets/work10.mp4" autoPlay muted loop ></video>
         </motion.div>
 
                    <motion.div initial={{opacity:0}} whileInView={{opacity:1}} whileHover={{ backgroundColor: "black",color:"white", scale: 1.05 }} transition={{ delay:0.3, duration: 0.3 }} viewport={{once:true}} className="home4-button">
@@ -180,6 +180,7 @@ className="home-page2-img md:w-1/3 w-full ">
         
         
         <div className="flex justify-center mt-8">
+
             </div>
 
       </div>

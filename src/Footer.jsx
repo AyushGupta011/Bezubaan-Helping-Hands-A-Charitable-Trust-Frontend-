@@ -34,7 +34,7 @@ const Footer = () => {
                        Ghaziabad </h3>
                 </div>
                 <div className="w-1/4 pl-5 footer-logo p-2 ">
-                    <img className='w-35 h-35 order-first md:order-last' src="src/assets/logo.jpeg" alt="Bezubaan Logo" />
+                    <img className='w-35 h-35 order-first md:order-last' src="/assets/logo.jpeg" alt="Bezubaan Logo" />
                 </div>
             </div>
 

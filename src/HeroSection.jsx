@@ -4,11 +4,11 @@ import { Link } from 'react-router';
 
 
 const heroImages = [
-    "/src/assets/work1.jpeg",
-    "/src/assets/work2.jpeg",
-    "/src/assets/work4.jpeg",
-    "/src/assets/work8.mp4",
-    "/src/assets/work9.mp4"
+    "/assets/work1.jpeg",
+    "/assets/work2.jpeg",
+    "/assets/work4.jpeg",
+    "/assets/work8.mp4",
+    "/assets/work9.mp4"
 
 
 ];

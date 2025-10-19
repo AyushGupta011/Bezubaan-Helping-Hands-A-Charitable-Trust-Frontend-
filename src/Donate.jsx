@@ -120,7 +120,7 @@ const Donate = () => {
       <div className="video">
          <video
               
-                src="/src/assets/donate.mp4"
+                src="/assets/donate.mp4"
                 autoPlay
                 loop
                 muted

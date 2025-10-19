@@ -19,7 +19,7 @@ const Navbar = () => {
     <div className=' navbar-container h-50 w-full mx-auto  flex justify-between px-10 '>
         {/* logo */}
         <div className='navbar-logo flex justify-around gap-3 items-center h-20'>
-            <img className='w-12 h-12  rounded-full ' src="src/assets/logo.jpeg" alt="" />
+            <img className='w-12 h-12  rounded-full ' src="/assets/logo.jpeg" alt="" />
             <h1 className='text-black font-semibold text-xl'>Bezubaan<p className='text-xl'>Helping Hands Charitable Trust</p></h1>
             
   </div>
