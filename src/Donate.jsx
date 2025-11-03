@@ -114,10 +114,10 @@ const Donate = () => {
 
   return (
     <div className="donate-container">
-      <div className="donate-page1 flex flex-col gap-10  bg-gray-200">
+      <div className="donate-page1 flex flex-col gap-10  ">
         <h2 className="text-2xl font-bold text-black p-20">Celebrate Your Birthday with Bezubaan 🐶 </h2>
         <p className="">Make your special day even more meaningful by sharing it with those who need your love the most – our rescued street animals. ❤️
-          <br />
+         
           Instead of just cakes and candles, celebrate by:
           <ul className="list-disc pl-6 mt-2">
             <li>🐶 Feeding rescued animals a special meal</li>
@@ -129,7 +129,10 @@ const Donate = () => {
         </p>
         <br />
 
-      <div className="video">
+
+
+      </div>
+         <div className="items-center video">
          <video
               
                 src="/assets/donate.mp4"
@@ -139,15 +142,12 @@ const Donate = () => {
                 className="hero-video md:h-150 md:w-120 h-90 w-90 object-cover"
               />
       </div>
-
-      </div>
-   
-    <div className="donate-form bg-gray-200 flex flex-col  p-6">
+    <div className="donate-form  flex flex-col  p-6">
         <h4 className="text-l mb-4">Donate via QR & Submit Form</h4>
         <img src="/assets/" alt="" />
-     
-      <form onSubmit={payNow} className="rounded-2xl flex flex-col gap-5 p-8">
-        <h2 className="text-2xl font-bold text-black mb-6">Donate to Bezubaan 🐶</h2>
+           
+      <form onSubmit={payNow} className="rounded-2xl flex w-full flex-col gap-5 p-8">
+  <h2 className="text-2xl font-bold text-black mb-6">Donate to Bezubaan 🐶</h2>
          
 
         <label className="block text-sm mb-1">Name</label>

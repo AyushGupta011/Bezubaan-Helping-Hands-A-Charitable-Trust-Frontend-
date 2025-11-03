@@ -108,7 +108,7 @@ className="home-page2-img md:w-1/3 w-full ">
 
         </div>
         <div className="home-page4 flex flex-col justify-around md:flex-row ">
-          <div className="home-page4-left items-center flex flex-col gap-20">
+          <div className="home-page4-left items-center flex flex-col gap-10">
             <motion.div initial={{opacity:0,x:-40}}
             whileInView={{opacity:1,x:0}}
              transition={{ delay:0.3, duration: 0.5 }}
@@ -132,7 +132,7 @@ className="home-page2-img md:w-1/3 w-full ">
           </motion.div>
 
           </div>
-                    <div className="home-page4-right flex flex-col items-center gap-20">
+                    <div className="home-page4-right flex flex-col items-center gap-10">
 
             <motion.div initial={{opacity:0,x:40}}
             whileInView={{opacity:1,x:0}}

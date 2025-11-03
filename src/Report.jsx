@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import {motion} from "motion/react";
 import { FaPaw, FaHandPaper, FaDog, FaBolt, FaClock } from 'react-icons/fa';
+import api from "./utils/api";
 const crueltyTypes = [
   {
     icon: <FaPaw size={30} className="text-black" />,
@@ -40,6 +41,7 @@ const Report = () => {
   });
 
   const [status, setStatus] = useState("");
+  const [statusType,setStatusType]=useState("");
 
   const handleChange = (e) => {
     if (e.target.type === "file") {
@@ -52,6 +54,7 @@ const Report = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setStatus("Submitting...");
+    setStatusType("");
 
     const data = new FormData();
     Object.keys(formData).forEach((key) => {
@@ -59,13 +62,12 @@ const Report = () => {
     });
 
     try {
-      const res = await fetch("http://localhost:5000/api/report-cruelty", {
-        method: "POST",
-        body: data,
-      });
+      const res = await api.post("/report/new",formData);
 
-      if (res.ok) {
-        setStatus("Report submitted successfully ✅");
+      if (res.data.success) {
+   setStatus(`✅ ${res.data.message}`);
+        setStatusType("success");
+    
         setFormData({
           name: "",
           contact: "",
@@ -76,19 +78,22 @@ const Report = () => {
           image: null,
         });
       } else {
-        setStatus("Error submitting report ❌");
+        setStatus("Error submitting report ❌,Please try again later.");
+        setStatusType("error")
       }
-    } catch (err) {
-      setStatus("Server error ❌");
+    } catch (error) {
+      setStatus("Server error ❌,,Please try again later .");
+       console.error("Error:",error);
+      setStatusType("error");
     }
   };
 
   return (
-    <div className="bg-gray-200 py-16 px-4 flex flex-col justify-center items-center ">
+    <div className=" flex flex-col justify-center items-center ">
         <div className="report-page1 flex flex-col justify-center items-center gap-20 w-full ">
             <motion.div
         initial={{ opacity: 0, y: -20 }}
-        whileInView={{ opacity: 1, y: 0 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
         className="text-center max-w-3xl"
@@ -116,11 +121,11 @@ const Report = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 * index, duration: 0.6 }}
             viewport={{ once: true }}
-            className="bg-white shadow-md rounded-lg p-6 flex flex-col items-center text-center hover:scale-105 transition-transform"
+            className=" bg-white text-black border-2 border-black shadow-md rounded-lg p-6 flex flex-col items-center text-center hover:scale-105 transition-transform"
           >
-            <div className="mb-4">{item.icon}</div>
+            <div className="mb-4  ">{item.icon}</div>
             <h3 className="text-xl font-semibold text-red-500 mb-2">{item.title}</h3>
-            <p className="text-gray-700">{item.description}</p>
+            <p className="text-black">{item.description}</p>
           </motion.div>
         ))}
       </motion.div>
@@ -278,7 +283,11 @@ const Report = () => {
           whileInView={{opacity:1,y:0}}
           transition={{delay:0.3 , duration:0.5}}
           viewport={{once:true}}
-       className="mt-4 text-center text-sm">{status}</motion.p>}
+       className={`mt-4 text-center text-sm ${
+            statusType === "success"
+              ? " text-green-700 "
+              : " text-red-700  "
+          }`}>{status}</motion.p>}
     </div>
 
     </div>

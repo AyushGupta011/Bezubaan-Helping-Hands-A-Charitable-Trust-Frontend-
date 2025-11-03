@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
+import api from './utils/api';
 
 const Volunteer = () => {
   const [formData, setFormData] = useState({
@@ -10,18 +11,24 @@ const Volunteer = () => {
     availability: '',
     message: ''
   });
-
-  const [submitStatus, setSubmitStatus] = useState('');
+const [status,setStatus]=useState("");
+  const [statusType, setStatusType] = useState("");
 
   const handleChange = (e) => {
     setFormData({...formData, [e.target.name]: e.target.value});
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // For now, just show a success message
-    setSubmitStatus('Thank you! Your volunteer request has been submitted.');
-    setFormData({
+    setStatus("");
+    setStatusType("");
+
+    try {
+      const res=await api.post("/volunteer/new",formData)
+       if(res.data.success){
+         setStatus(`✅ ${res.data.message}`);
+        setStatusType("success");
+         setFormData({
       name: '',
       email: '',
       phone: '',
@@ -29,12 +36,24 @@ const Volunteer = () => {
       availability: '',
       message: ''
     });
+      }else{
+        setStatus("❌ Failed to submit form. Please try again later.")
+        setStatusType("error")
+      }
+    } catch (error) {
+      console.error("Error:",error);
+      setStatus("Server error,Please try again later .");
+      setStatusType("error");
+      
+      
+    }
+  
 
-    // Later you can send formData to backend here
+   
   };
 
   return (
-    <div className="bg-gray-200 py-12 px-4 ">
+    <div className=" py-12 px-4 ">
       <div className="volunteer-page1 h-full w-full p-20">
          <div className="volunteer-content text-center flex flex-col items-center justify-center gap-20 px-4  py-12">
         {/* Heading */}
@@ -43,7 +62,7 @@ const Volunteer = () => {
           whileInView={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="text-4xl md:text-5xl sm:text-4xl font-bold text-black mb-4"
+          className="text-4xl md:text-5xl sm:text-4xl font-bold text-black "
         >
           Join Our Volunteer Family
         </motion.h1>
@@ -65,36 +84,37 @@ const Volunteer = () => {
           whileInView={{ opacity: 1 }}
           transition={{ delay: 0.4, duration: 0.6 }}
           viewport={{ once: true }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-6"
+
+          className="grid grid-cols-1 anime-div md:grid-cols-2 gap-6"
         >
           <motion.div   animate={{ y: [0, -10, 0, 10, 0] }}  // up-down animation
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="bg-white p-6 rounded-lg shadow text-center h-[200px] hover:shadow-lg transition">
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="bg-white anime pt-[10rem] text-black border-black border-2 rounded-lg shadow text-center h-[200px] hover:shadow-lg transition">
             <h3 className="text-xl font-semibold mb-2">Feeding Animals</h3>
-            <p className="text-gray-600">
+            <p className="">
               Help provide nutritious food to street animals in different areas, ensuring no animal goes hungry.
             </p>
           </motion.div>
 
           <motion.div  animate={{ y: [0, -10, 0, 10, 0] }}  // down-up animation
-  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="bg-white p-6 rounded-lg shadow text-center h-[200px] hover:shadow-lg transition">
+  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="bg-white anime p-6 rounded-lg text-black border-black border-2 shadow text-center h-[200px] hover:shadow-lg transition">
             <h3 className="text-xl font-semibold mb-2">Rescue Operations</h3>
-            <p className="text-gray-600">
+            <p className="">
               Participate in rescue missions to save injured or abandoned animals and take them to safety or clinics.
             </p>
           </motion.div>
 
           <motion.div   animate={{ y: [0, -10, 0, 10, 0] }}  // left-right animation
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="bg-white p-6 rounded-lg shadow text-center h-[200px] hover:shadow-lg transition">
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="bg-white anime p-6 text-black border-black border-2 rounded-lg shadow text-center h-[200px] hover:shadow-lg transition">
             <h3 className="text-xl font-semibold mb-2">Awareness Campaigns</h3>
-            <p className="text-gray-600">
+            <p className="">
               Spread awareness about animal welfare through workshops, campaigns, and social media.
             </p>
           </motion.div>
 
           <motion.div   animate={{ y: [0, -10, 0, 10, 0] }}  // up-down animation
-          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="bg-white p-6 rounded-lg shadow text-center h-[200px] hover:shadow-lg transition">
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} className="bg-white anime text-black p-6 border-black border-2 rounded-lg shadow text-center h-[200px] hover:shadow-lg transition">
             <h3 className="text-xl font-semibold mb-2">Fundraising & Support</h3>
-            <p className="text-gray-600">
+            <p className="">
               Help us raise funds and gather resources to support our rescue, feeding, and medical programs.
             </p>
           </motion.div>
@@ -189,8 +209,8 @@ const Volunteer = () => {
             Submit
           </button>
 
-          {submitStatus && (
-            <p className="text-green-600 font-medium mt-3">{submitStatus}</p>
+          {status && (
+            <p className="text-green-600 font-medium mt-3">{status}</p>
           )}
         </form>
       </div>

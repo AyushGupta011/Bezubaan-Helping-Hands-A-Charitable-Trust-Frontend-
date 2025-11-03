@@ -1,12 +1,20 @@
 import React from 'react'
 import { Link } from 'react-router'
 import { PawPrint } from 'lucide-react'
+import {motion} from 'motion/react';
 
 const Footer = () => {
   return (
     <div>
-        <footer className="footer w-full">
-            <div className=" w-full footer-container gap-10 flex justify-around items-center  text-gray-700 ">
+        <footer className="footer w-screen">
+            <motion.div
+          animate={{ y: [0, -10, 0, 10, 0] }}  // up-down animation
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+             className="w-1/4 pl-5 footer-logo p-2 ">
+                    <img className='w-35 h-35 order-first md:order-last' src="/assets/logo.jpeg" alt="Bezubaan Logo" />
+                </motion.div>
+            <div className=" w-screen footer-container gap-10 flex justify-around items-center  text-gray-700 ">
+                   
                 <div className="w-1/4 footer-links flex gap-1 flex-col">
             
                    <Link to="/"><h3 > <PawPrint size={15}/> Home</h3></Link>
@@ -20,7 +28,7 @@ const Footer = () => {
                     <Link to="https://www.instagram.com/bezubaan.01?igsh=Y29lZjQ3eXF6a3V5"><h3 className='text-2xl'><PawPrint size={15}/>Instagram</h3></Link>
                     <Link to="/"><h3 ><PawPrint size={15}/>Facebook</h3></Link>
                 </div>
-                <div className="w-1/4 mx-auto footer-location  p-2 ">
+                <div className=" footer-location">
                     <h1 className='text-lg font-bold'>Location</h1>
                     <h2>
                     1:
@@ -33,9 +41,7 @@ const Footer = () => {
                     <h3>Near Shankar Hotel Crossing Republic <br />
                        Ghaziabad </h3>
                 </div>
-                <div className="w-1/4 pl-5 footer-logo p-2 ">
-                    <img className='w-35 h-35 order-first md:order-last' src="/assets/logo.jpeg" alt="Bezubaan Logo" />
-                </div>
+             
             </div>
 
 
@@ -44,7 +50,7 @@ const Footer = () => {
 
 
 
-            <div className="copyright text-center ">
+            <div className="copyright text-center  ">
                 <p>&copy; {new Date().getFullYear()} Bezubaan Helping Hands Charitable Trust. All rights reserved.</p>
             </div>
         </footer>

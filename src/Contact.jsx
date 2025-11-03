@@ -1,11 +1,15 @@
 import React, { useState } from "react";
 import {motion} from "motion/react"
+import api from "./utils/api.js";
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
   });
+  const [status,setStatus]=useState("");
+  const [statusType,setStatusType]=useState("")
+
 
   const handleChange = (e) => {
     setFormData({
@@ -14,17 +18,38 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Submitted:", formData);
-    // You can integrate backend API call here (Node.js/Express)
-    alert("Thank you! Your message has been sent.");
-    setFormData({ name: "", email: "", message: "" });
+    setStatus("");
+    setStatusType("");
+  
+
+    try {
+      const res= await api.post("/contact/add",formData);
+
+      if(res.data.success){
+         setStatus(`✅ ${res.data.message}`);
+        setStatusType("success");
+        setFormData({ name: "", email: "", message: "" });
+      }else{
+        setStatus("❌ Failed to send message. Please try again later.")
+        setStatusType("error")
+      }
+
+      
+    } catch (error) {
+      console.error("Error:",error);
+      setStatus("Server error,Please try again later .");
+      setStatusType("error");
+      
+    
+    }
+  
   };
 
   return (
-    <div className="bg-gray-200 py-12 h-full w-full px-4">
-        <div className="contact-page1 w-full h-full flex flex-col items-center justify-center gap-20 ">
+    <div className=" py-12 h-full w-full px-4">
+        <div className="contact-page1 w-full h-full flex flex-col  items-center justify-center gap-20 ">
           <motion.div
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -63,7 +88,7 @@ const Contact = () => {
 
 
         </div>
-        <section className="contact-page2">
+        <section className="contact-page2 items-center">
    
       <motion.p initial={{opacity:0,y:-20}}
           whileInView={{opacity:1,y:0}}
@@ -71,6 +96,20 @@ const Contact = () => {
           viewport={{once:true}} className="text-center mb-8 page-p">
         We’d love to hear from you! Fill out the form below and we’ll get back to you as soon as possible.
       </motion.p>
+       {status && (
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className={`mt-6   text-center items-center text-lg font-medium ${
+            statusType === "success"
+              ? " text-green-700 "
+              : " text-red-700  "
+          }`}
+        >
+          {status}
+        
+        </motion.p>
+      )}
 
       {/* Contact Form */}
       <form onSubmit={handleSubmit} className="contact-form flex items-center flex-col gap-4">
@@ -119,6 +158,7 @@ const Contact = () => {
           whileInView={{opacity:1,y:0}}
           transition={{delay:0.3 , duration:0.5}}
           viewport={{once:true}}
+          
           className="p-3 bg-white text-black rounded-lg text-lg hover:bg-black hover:text-white transition border-2"
         >
           Send Message
@@ -153,7 +193,7 @@ const Contact = () => {
         <motion.p initial={{opacity:0,y:-20}}
           whileInView={{opacity:1,y:0}}
           transition={{delay:0.3 , duration:0.5}}
-          viewport={{once:true}}><strong>Email:</strong> contact@bezubaan.org</motion.p>
+          viewport={{once:true}}><strong>Email:</strong>bezubaanlighttolive@gmail.com</motion.p>
       </motion.div>
 
       {/* Google Map */}
