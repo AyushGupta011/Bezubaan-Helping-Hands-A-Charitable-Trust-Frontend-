@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import loadRazorpay from "./utils/loadRazorpay";
+import api from "./utils/api";
 
-const API = "http://localhost:5000/api";
+
 
 const Donate = () => {
   const [form, setForm] = useState({
@@ -15,101 +15,92 @@ const Donate = () => {
   const [donations,setDonations] =useState([]);
 
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+
+  // ✅ Fetch all donations from backend
   useEffect(() => {
-    const savedDonations = JSON.parse(localStorage.getItem("donations")) || [];
-    setDonations(savedDonations);
+    const fetchDonations = async () => {
+      try {
+        const { data } = await api.get(`/donations/all`);
+        setDonations(data);
+      } catch (err) {
+        console.error("Error fetching donations", err);
+      }
+    };
+    fetchDonations();
   }, []);
 
-  // Save to localStorage whenever donations update
-  useEffect(() => {
-    localStorage.setItem("donations", JSON.stringify(donations));
-  }, [donations]);
-
+  // ✅ Razorpay Payment Flow
   const payNow = async (e) => {
     e.preventDefault();
+
     if (!form.name || !form.email || !form.amount) {
-      alert("Please fill name, email and amount");
+      alert("Please fill name, email, and amount");
       return;
     }
 
-    
     setLoading(true);
-
-//mock payment success after 1.5 seconds
-      setTimeout(() => {
-      alert("✅ Thank you for your generous donation! 🐾");
-      const newDonation = {
-        ...form,
-        date: new Date().toLocaleString(),
-      };
-      setDonations([...donations, newDonation]);
-      setForm({ name: "", email: "", amount: "", message: "" });
+    const ok = await loadRazorpay();
+    if (!ok) {
       setLoading(false);
-    }, 1500);
+      alert("Failed to load payment gateway. Check your internet.");
+      return;
+    }
 
-  //   const ok = await loadRazorpay();
-  //   if (!ok) {
-  //     setLoading(false);
-  //     alert("Failed to load payment gateway. Check your internet.");
-  //     return;
-  //   }
+    try {
+      // 1️⃣ Create Razorpay order from backend
+      const { data } = await api.post(`/donations/donate`,form);
 
-  //   try {
-  //     // 1) Create order on backend
-  //     const { data } = await axios.post(`${API}/donations/order`, {
-  //       name: form.name,
-  //       email: form.email,
-  //       amount: Number(form.amount),
-  //       message: form.message,
-  //     });
+      const options = {
+        key: data.key,
+        amount: data.amount,
+        currency: data.currency,
+        name: "Bezubaan Animal Welfare",
+        description: "Donation",
+        order_id: data.order.id,
+        prefill: {
+          name: form.name,
+          email: form.email,
+        },
+        theme: { color: "#16a34a" },
+        handler: async function (response) {
+          try {
+            // 2️⃣ Verify and Save donation
+            await api.post(`/donations/verify`, {
+               razorpay_order_id: response.razorpay_order_id,
+  razorpay_payment_id: response.razorpay_payment_id,
+  razorpay_signature: response.razorpay_signature
+            });
 
-  //     const options = {
-  //       key: data.key,
-  //       amount: data.amount,           // in paise
-  //       currency: data.currency,
-  //       name: "Bezubaan Animal Welfare",
-  //       description: "Donation",
-  //       order_id: data.orderId,
-  //       prefill: {
-  //         name: form.name,
-  //         email: form.email,
-  //       },
-  //       notes: { message: form.message },
-  //       theme: { color: "#16a34a" },
-  //       handler: async function (response) {
-  //         // 2) Verify on backend
-  //         try {
-  //           await axios.post(`${API}/donations/verify`, {
-  //             razorpay_order_id: response.razorpay_order_id,
-  //             razorpay_payment_id: response.razorpay_payment_id,
-  //             razorpay_signature: response.razorpay_signature,
-  //           });
-  //           alert("Thank you for your donation! 🐾");
-  //           setForm({ name: "", email: "", amount: "", message: "" });
-  //           const newDonation ={...form, date:new Date().toLocaleString()};
-  //   setDonations([...donate,newDonation])
+            alert("✅ Thank you for your generous donation! 🐾");
+            setForm({ name: "", email: "", amount: "", message: "" });
 
-  //         } catch {
-  //           alert("Payment captured, but verification failed. We’ll review it.");
-  //         }
-  //       },
-  //       modal: {
-  //         ondismiss: function () {
-  //           setLoading(false);
-  //         },
-  //       },
-  //     };
+            // Refresh donations
+            const { data: updated } = await api.get(`/donations/all`);
+            setDonations(updated);
+          } catch (err) {
+            alert("Payment captured but verification failed. We’ll check it.");
+          }
+        },
+        modal: {
+          ondismiss: function () {
+            setLoading(false);
+          },
+        },
+      };
 
-  //     const rzp = new window.Razorpay(options);
-  //     rzp.on("payment.failed", function () {
-  //       setLoading(false);
-  //       alert("Payment failed. Please try again.");
-  //     });
-  //     rzp.open();
-  //   } catch (e) {
-  //     alert(e?.response?.data?.message || "Could not start payment.");
-  //     setLoading(false);
-  //   }
+      const rzp = new window.Razorpay(options);
+      rzp.on("payment.failed", function () {
+        setLoading(false);
+        alert("Payment failed. Please try again.");
+      });
+      rzp.open();
+    } catch (err) {
+      alert("Could not start payment.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+
   };
 
   return (
@@ -173,7 +164,7 @@ const Donate = () => {
       </form>
     </div>
     {/* card section */}
-    <div className="donation-card ">
+    {/* <div className="donation-card ">
       <h2 className="text-lg font-bold mb-2">Recent Donations</h2>
       <div className="card-content grid grid-cols-1 md:grid-cols-3 gap-4">
         {donations.map((don, index) => (
@@ -188,7 +179,7 @@ const Donate = () => {
         ))}
     </div>
 
-     </div>
+     </div> */}
 
      </div>
   );

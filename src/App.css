@@ -216,6 +216,7 @@ width:100%;
 .work-text{
   width: 100%;
   height: 100%;
+  text-align: start;
 }
 .work-text h1{
   padding-bottom: 7rem;
@@ -297,6 +298,157 @@ width:100%;
   font-size: 2rem;
   font-family: Georgia, 'Times New Roman', Times, serif;
 }
+.about{
+  width: 100%;
+  height: 100%;
+  padding: 5rem;
+}
+.about-text{
+  width: 100%;
+  height: 100%;
+}
+.about img{
+  width: 30rem;
+  height: 20rem;
+  border-radius: 10%;
+}
+.about h2{
+  font-size: 3.5rem;
+  text-align: center;
+  padding-bottom: 3rem;
+  text-transform: uppercase;
+  font-family: 'Times New Roman', Times, serif;
+}
+.about p{
+  font-size: 2rem;
+  line-height: 2;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.mission{
+  width: 100%;
+  height: 100%;
+  padding: 5rem;
+  gap: 5rem;
+}
+.mission h3{
+  font-size: 3rem;
+  text-align: start;
+  padding-bottom: 3rem;
+  text-transform: uppercase;
+  font-family: 'Times New Roman', Times, serif;
+}
+.mission p{
+  font-size: 1.8rem;
+  line-height: 2;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.mission img{
+  width: 25rem;
+  height: 25rem;
+  border-radius: 10%;
+}
+.mission video{
+  width: 25rem;
+  height: 25rem;
+  border-radius: 10%;
+  object-fit: cover;
+}
+.wedo{
+  width: 100%;
+  height: 100%;
+  padding: 5rem;
+  gap: 5rem;
+}
+.wedo-work{
+  width: 100%;
+  height: 100%;
+  padding-bottom: 3rem;
+}
+.wedo-text{
+  text-align: center;
+  width: 100%;
+  height: 100%;
+}
+.wedo h3{
+  font-size: 3.5rem ;
+  text-align: center;
+  padding-bottom: 3rem;
+  text-transform: uppercase;
+  font-family: 'Times New Roman', Times, serif;
+}
+.wedo-work h4{
+  font-size: 2rem;
+  text-align: start;
+  padding-bottom: 2rem;
+  font-family: 'Times New Roman', Times, serif;
+}
+.wedo-text p{
+  font-size: 1.8rem;
+  line-height: 2;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.vision{
+  width: 100%;
+  height: 100%;
+  padding: 5rem;
+}
+.vision h3{
+  font-size: 3.5rem;
+  text-align: center;
+  padding-bottom: 3rem;
+  text-transform: uppercase;
+  font-family: 'Times New Roman', Times, serif;
+}
+.vision p{
+  font-size: 2rem;
+  line-height: 2;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.vision img{
+  width: 30rem;
+  height: 20rem;
+  border-radius: 10%;
+}
+.join-us{
+ 
+  height: 100%;
+  padding: 2rem;
+}
+.join-us h3{
+  font-size: 3.5rem;
+  text-align: center;
+  padding-bottom: 3rem;
+  text-transform: uppercase;
+  font-family: 'Times New Roman', Times, serif;
+}
+.join-us p{
+  font-size: 2rem;
+  line-height: 2;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+.volun-btn{
+  width: 15rem;
+  height:4rem;
+  border:2px solid black;
+  border-radius: 2rem;
+left: 40%;
+position:relative;
+  margin-top: 3rem;
+}
+.volun-btn h4{
+  text-align: center;
+  padding-top: .6rem;
+  text-transform: uppercase;
+  font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+  font-size: 1.2rem;
+}
+.volun-btn:hover{
+  background-color: black;
+  color: white;
+  transition: all 0.3s ease-in-out;
+}
+/* contact section */
+
 
 
 
@@ -1304,6 +1456,12 @@ font-weight: 600;
 .about p{
   font-size: 1.1rem;
 }
+.about img{
+  width: 20rem;
+  height: 20rem;
+  border-radius: 10%;
+}
+
 .mission{
   padding: 0.6rem;
 display: flex;
@@ -1321,18 +1479,38 @@ gap: 5rem;
   font-size: 1.25rem;
 
 }
-.wedo{
-  gap: 5rem;
-  padding: 0.6rem;
+.mission img{
+  width: 20rem;
+  height: 20rem;
+  /* padding-left: 1rem; */
+  border-radius: 10%;
 }
+.mission video{
+  width: 20rem;
+  height: 20rem;
+  border-radius: 10%;
+}
+.wedo{
+  padding: 0.6rem;
+  gap: 3rem;
+
+}
+
 .wedo h3{
   font-size: 2.5rem ;
 }
 .wedo-work{
-  padding: .2rem;
+  padding-left: 0.5rem;
+  text-align: center;
+  width:20rem;
+
 }
 .wedo-work h4{
-  font-size: 1.3rem;
+  font-size: 1.3rem !important;
+  text-align: center;
+}
+.wedo-text p{
+  font-size: 1.2rem !important;
 }
 .wedo-text{
 padding-bottom: 1.5rem;}
@@ -1348,6 +1526,16 @@ padding-bottom: 1.5rem;}
 .vision p{
   font-size: 1.2rem;
 }
+.vision img{
+  width: 20rem;
+  height: 15rem;
+  border-radius: 10%;
+}
+.vision-img{
+  padding-top: 1rem;
+  padding-left: 0.5rem;
+}
+
 .join-us{
   padding: 0.6rem;
 
@@ -1366,11 +1554,12 @@ padding-bottom: 1.5rem;}
   padding-bottom: 1.5rem;
   margin-bottom: 3rem;
   text-align: center;
-
+position: relative;
+  left: 20%;
   width: 60vw;
 }
 .volun-btn h4{
-  font-size: 1.3rem;
+  font-size: 1rem;
  padding-top: 1rem;
 }
 .contact-page2{

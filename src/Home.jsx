@@ -112,23 +112,23 @@ className="home-page2-img md:w-1/3 w-full ">
             <motion.div initial={{opacity:0,x:-40}}
             whileInView={{opacity:1,x:0}}
              transition={{ delay:0.3, duration: 0.5 }}
-          viewport={{ once: false}} className="img-left ">
-            <img src="/assets/work5.jpeg" alt="" />
+          viewport={{ once:true}} className="img-left ">
+            <img src="/assets/dogeating.jpg" alt="" />
           </motion.div>
            <motion.div initial={{opacity:0,x:40}}
             whileInView={{opacity:1,x:0 }}
              transition={{ delay:0.3, duration: 0.5 }}
-          viewport={{ once: false}} className="img-right rounded-2xl overflow-hidden">
-          <video className='w-full h-full object-cover rounded-2xl' src="/assets/work10.mp4" autoPlay muted loop ></video>
+          viewport={{ once:true}} className="img-right rounded-2xl overflow-hidden">
+          <video className='w-full h-full object-cover rounded-2xl' src="/assets/work13.mp4" autoPlay muted loop ></video>
         </motion.div>
 
             <motion.div initial={{opacity:0,x:-40}}
             whileInView={{opacity:1,x:0}}
              transition={{ delay:0.3, duration: 0.5 }}
-          viewport={{ once: false}}
+          viewport={{ once:true}}
             
             className="img-left ">
-            <img src="/assets/work5.jpeg" alt="" />
+            <img src="/assets/restdog.jpg" alt="" />
           </motion.div>
 
           </div>
@@ -138,7 +138,7 @@ className="home-page2-img md:w-1/3 w-full ">
             whileInView={{opacity:1,x:0}}
              transition={{ delay:0.3, duration: 0.5 }}
           viewport={{ once: true}} className="img-right rounded-2xl overflow-hidden">
-          <video className='w-full h-full object-cover rounded-2xl' src="/assets/work10.mp4" autoPlay muted loop ></video>
+          <video className='w-full h-full object-cover rounded-2xl' src="/assets/work12.mp4" autoPlay muted loop ></video>
         </motion.div>
                                <motion.div initial={{opacity:0,x:-40}}
             whileInView={{opacity:1,x:0}}
@@ -150,7 +150,7 @@ className="home-page2-img md:w-1/3 w-full ">
             whileInView={{opacity:1,x:0}}
              transition={{ delay:0.3, duration: 0.5 }}
           viewport={{ once: true}} className="img-right rounded-2xl overflow-hidden">
-          <video className='w-full h-full object-cover rounded-2xl' src="/assets/work10.mp4" autoPlay muted loop ></video>
+          <video className='w-full h-full object-cover rounded-2xl' src="/assets/work11.mp4" autoPlay muted loop ></video>
         </motion.div>
 
                    <motion.div initial={{opacity:0}} whileInView={{opacity:1}} whileHover={{ backgroundColor: "black",color:"white", scale: 1.05 }} transition={{ delay:0.3, duration: 0.3 }} viewport={{once:true}} className="home4-button">
