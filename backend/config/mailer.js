@@ -3,19 +3,16 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: process.env.SMTP_HOST,
+  port: process.env.SMTP_PORT || 587,
+  secure: false,
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASS,
   },
+  
 });
-transporter.verify((err, success) => {
-  if (err) {
-    console.error("❌ SMTP VERIFY FAILED:", err.message);
-  } else {
-    console.log("✅ SMTP SERVER READY");
-  }
-});
+
 
 
 export const sendMail = async (to,subject,message) => {
