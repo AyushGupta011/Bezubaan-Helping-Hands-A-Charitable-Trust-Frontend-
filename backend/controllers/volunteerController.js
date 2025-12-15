@@ -7,7 +7,8 @@ dotenv.config();
 export const submitVolunteer = async (req, res) => {
   try {
     // Save volunteer to DB
-    const volunteer = new Volunteer(req.body);
+    const {name,email,phone,role,availability,message} = req.body;
+    const volunteer = new Volunteer({name,email,phone,role,availability,message});
     await volunteer.save();
 
     // ----- Email to Admin -----
@@ -18,7 +19,7 @@ export const submitVolunteer = async (req, res) => {
           
           <!-- Logo Section -->
           <div style="text-align: center; padding: 20px; background-color: #2E8B57;">
-            <img src="${process.env.LOGO_URL}" alt="Bezubaan NGO Logo" style="max-width: 150px; height: auto;" />
+       <img src="${process.env.LOGO_URL}" alt="Bezubaan NGO Logo" style="max-width: 150px;" />
           </div>
 
           <!-- Content Section -->
@@ -26,27 +27,27 @@ export const submitVolunteer = async (req, res) => {
             <h2 style="color: #2E8B57; text-align: center;">🌟 New Volunteer Submission</h2>
 
             <div style="margin: 15px 0; padding: 15px; background-color: #f1f8f2; border-left: 5px solid #2E8B57;">
-              <strong>Name:</strong> ${req.body.name}
+              <strong>Name:</strong> ${name}
             </div>
 
             <div style="margin: 15px 0; padding: 15px; background-color: #f1f8f2; border-left: 5px solid #2E8B57;">
-              <strong>Email:</strong> ${req.body.email}
+              <strong>Email:</strong> ${email}
             </div>
 
             <div style="margin: 15px 0; padding: 15px; background-color: #f1f8f2; border-left: 5px solid #2E8B57;">
-              <strong>Phone:</strong> ${req.body.phone || 'N/A'}
+              <strong>Phone:</strong> ${phone || 'N/A'}
             </div>
 
             <div style="margin: 15px 0; padding: 15px; background-color: #f1f8f2; border-left: 5px solid #2E8B57;">
-              <strong>Role:</strong> ${req.body.role}
+              <strong>Role:</strong> ${role}
             </div>
 
             <div style="margin: 15px 0; padding: 15px; background-color: #f1f8f2; border-left: 5px solid #2E8B57;">
-              <strong>Availability:</strong> ${req.body.availability}
+              <strong>Availability:</strong> ${availability}
             </div>
 
             <div style="margin: 15px 0; padding: 15px; background-color: #f1f8f2; border-left: 5px solid #2E8B57;">
-              <strong>Message:</strong><br>${req.body.message || 'N/A'}
+              <strong>Message:</strong><br>${message || 'N/A'}
             </div>
 
             <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
@@ -71,15 +72,15 @@ export const submitVolunteer = async (req, res) => {
         <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
           
           <div style="text-align: center; padding: 20px; background-color: #2E8B57;">
-            <img src="${process.env.LOGO_URL}" alt="Bezubaan NGO Logo" style="max-width: 150px; height: auto;" />
+              <img src="${process.env.LOGO_URL}" alt="Bezubaan NGO Logo" style="max-width: 150px;" />
           </div>
 
           <div style="padding: 25px;">
             <h2 style="color: #2E8B57; text-align: center;">🙏 Thank You for Volunteering!</h2>
-            <p>Hi ${req.body.name},</p>
-            <p>We have received your volunteer application for <strong>${req.body.role}</strong> with availability: <strong>${req.body.availability}</strong>.</p>
+            <p>Hi ${name},</p>
+            <p>We have received your volunteer application for <strong>${role}</strong> with availability: <strong>${availability}</strong>.</p>
             <div style="margin: 15px 0; padding: 15px; background-color: #f1f8f2; border-left: 5px solid #2E8B57;">
-              <strong>Your Message:</strong><br>${req.body.message || 'N/A'}
+              <strong>Your Message:</strong><br>${message || 'N/A'}
             </div>
             <p>Our team will reach out to you soon. Thank you for supporting street animals! 🐶🐱</p>
 
@@ -97,7 +98,7 @@ export const submitVolunteer = async (req, res) => {
       </div>
     `;
 
-    await sendMail( req.body.email,userSubject, userEmailHtml);
+    await sendMail(email,userSubject, userEmailHtml);
 
     res.status(201).json({success:true, message: 'Volunteer form submitted successfully', volunteer });
 

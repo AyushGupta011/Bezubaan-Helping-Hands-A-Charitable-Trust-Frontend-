@@ -48,6 +48,8 @@ export const createOrder = async (req, res) => {
 
 // 🟢 Step 2: Verify Payment Signature
 export const verifyPayment = async (req, res) => {
+  console.log("🔥 VERIFY PAYMENT HIT:", req.body);
+
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
     const body = razorpay_order_id + '|' + razorpay_payment_id;
@@ -109,6 +111,8 @@ export const verifyPayment = async (req, res) => {
         </div>
       </div>
     `;
+    console.log("📧 Sending ADMIN mail to:", process.env.ADMIN_EMAIL);
+
     await sendMail(process.env.ADMIN_EMAIL, adminSubject, adminHtml);
 
     // ---------- Confirmation Email to User ----------
@@ -142,6 +146,8 @@ export const verifyPayment = async (req, res) => {
         </div>
       </div>
     `;
+    console.log("📧 Sending USER mail to:", email);
+
     await sendMail(email, userSubject, userHtml);
 
       res.json({ success: true });

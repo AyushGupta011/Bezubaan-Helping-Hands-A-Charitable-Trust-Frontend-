@@ -6,10 +6,16 @@ dotenv.config();
 
 export const submitContact = async (req, res) => {
   try {
-    const contact = new Contact(req.body);
-    await contact.save();
+    const {name,email,message} = req.body;
 
-  try {
+    if(!name || !email || !message){
+      return res.status(400).json({ success:false, message:'All fields are required'})
+    }
+   const contact=new Contact({
+    name,email,message
+   })
+   await contact.save()
+  
     const emailSubject = `🐾 New Message from a Caring Supporter!`;
 const emailHtml = `
   <div style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 30px;">
@@ -17,7 +23,7 @@ const emailHtml = `
       
       <!-- Logo Section -->
       <div style="text-align: center; padding: 20px; background-color: #2E8B57;">
-        <img src="${process.env.LOGO_URL}" alt="Bezubaan NGO Logo" style="max-width: 150px; height: auto;" />
+        // <img src="${process.env.LOGO_URL}" alt="Bezubaan NGO Logo" style="max-width: 150px; height: auto;" />
       </div>
 
       <!-- Content Section -->
@@ -25,15 +31,15 @@ const emailHtml = `
         <h2 style="color: #2E8B57; text-align: center;">📬 New Contact Form Submission</h2>
 
         <div style="margin: 15px 0; padding: 15px; background-color: #f1f8f2; border-left: 5px solid #2E8B57;">
-          <strong>Name:</strong> ${req.body.name}
+          <strong>Name:</strong> ${name}
         </div>
 
         <div style="margin: 15px 0; padding: 15px; background-color: #f1f8f2; border-left: 5px solid #2E8B57;">
-          <strong>Email:</strong> ${req.body.email}
+          <strong>Email:</strong> ${email}
         </div>
 
         <div style="margin: 15px 0; padding: 15px; background-color: #f1f8f2; border-left: 5px solid #2E8B57;">
-          <strong>Message:</strong><br>${req.body.message}
+          <strong>Message:</strong><br>${message}
         </div>
 
         <hr style="border: 0; border-top: 1px solid #eee; margin: 25px 0;">
@@ -57,7 +63,7 @@ const emailHtml = `
       <div style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 30px;">
         <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 10px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
           <div style="text-align: center; padding: 20px; background-color: #2E8B57;">
-            <img src="${process.env.LOGO_URL}" alt="Bezubaan NGO Logo" style="max-width: 150px; height: auto;" />
+            // <img src="${process.env.LOGO_URL}" alt="Bezubaan NGO Logo" style="max-width: 150px; height: auto;" />
           </div>
           <div style="padding: 25px;">
             <h2 style="color: #2E8B57; text-align: center;">🙏 Thank You for Reaching Out!</h2>
@@ -91,11 +97,7 @@ const emailHtml = `
     //   <p><b>Message:</b> ${req.body.message}</p>
     //   `
     // );
-    } catch (mailError) {
-      console.error("Mail sending failed:", mailError);
-      // Optionally, you can still respond success if saving to DB worked
-      return res.status(500).json({ message: 'Contact saved, but failed to send email', error: mailError.message });
-    }
+  
     res.status(200).json({success:true, message: 'Mail sent Successfully to our team', contact });
   } catch (error) {
     console.error("save contact error",error)

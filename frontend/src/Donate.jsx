@@ -52,8 +52,8 @@ const Donate = () => {
 
       const options = {
         key: data.key,
-        amount: data.amount,
-        currency: data.currency,
+        amount: data.order.amount,
+        currency: data.order.currency,
         name: "Bezubaan Animal Welfare",
         description: "Donation",
         order_id: data.order.id,

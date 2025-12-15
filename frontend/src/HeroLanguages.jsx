@@ -12,8 +12,8 @@ import { motion, AnimatePresence, scale } from "motion/react";
  * Stops automatically after the last slide.
  */
 export default function HeroLanguages({
-  displayDuration = 2200,
-  animationDuration = 600,
+  displayDuration = 2000,
+  animationDuration = 500,
   onFinish
 }) {
   const translations = [

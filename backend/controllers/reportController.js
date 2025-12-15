@@ -8,6 +8,8 @@ export const submitReport = async (req, res) => {
   try {
     console.log("Incoming Report Data:", req.body);
 const contactParts = req.body.contact.split("/");
+const phone = contactParts[0] || "N/A";
+const email = contactParts[1] || null;
 const contactString = `Phone: ${contactParts[0]} | Email: ${contactParts[1] || 'N/A'}`;
     const newreport = new Report({
         name: req.body.name,
@@ -20,7 +22,11 @@ const contactString = `Phone: ${contactParts[0]} | Email: ${contactParts[1] || '
     });
    const savedReport= await newreport.save();
       console.log("Saved Report:", savedReport);
-try{
+
+
+
+     
+
      const adminSubject = `🚨 New Animal Cruelty Report Received!`;
     const adminEmailHtml = `
       <div style="font-family: Arial, sans-serif; background-color: #f9f9f9; padding: 30px;">
@@ -62,16 +68,13 @@ try{
         </div>
       </div>
     `;
-
+console.log("SENDING ADMIN MAIL TO:", process.env.ADMIN_EMAIL);
     await sendMail(process.env.ADMIN_EMAIL,adminSubject, adminEmailHtml);
-            }catch(err) {
-  console.error("Failed to send admin email:", err);
-}
+          
+
 
     // ---------- Confirmation Email to User ----------
-    if (req.body.email) {
-        try {
-            
+  
        
       const userSubject = `🙏 Thank You for Reporting – Bezubaan NGO`;
       const userEmailHtml = `
@@ -102,13 +105,12 @@ try{
           </div>
         </div>
       `;
-
-      await sendMail(req.body.email, userSubject,userEmailHtml);
-       } catch (error) {
-             console.error("Failed to send user email:", error);
-        }
-    }
-    res.status(201).json({ success:true, message: 'Report submitted', newreport });
+console.log("SENDING USER MAIL TO:", email);
+      await sendMail(email, userSubject,userEmailHtml);
+     
+    
+       res.status(201).json({ success:true, message: 'Report submitted', newreport });
+ 
   } catch (error) {
     res.status(500).json({success:false, message: 'Error saving report', error });
   }
