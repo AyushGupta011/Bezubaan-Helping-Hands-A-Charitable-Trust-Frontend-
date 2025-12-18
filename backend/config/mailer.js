@@ -3,7 +3,8 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-export const sendMail = async (to, subject, message) => {
+export const sendMail = async (to, subject, message) => { 
+  console.log("BREVO_API_KEY VALUE:", process.env.BREVO_API_KEY);
   try {
     await axios.post(
       "https://api.brevo.com/v3/smtp/email",
