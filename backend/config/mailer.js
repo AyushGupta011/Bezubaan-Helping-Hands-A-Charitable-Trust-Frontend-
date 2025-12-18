@@ -10,7 +10,7 @@ export const sendMail = async (to, subject, message) => {
       {
         sender: {
           name: "Bezubaan Support",
-          email: "bezubaan@gmail.com", // must be verified in Brevo
+          email: "ayushshg4@gmail.com", // must be verified in Brevo
         },
         to: [
           {
