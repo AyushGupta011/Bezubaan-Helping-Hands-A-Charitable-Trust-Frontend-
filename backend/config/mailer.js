@@ -1,30 +1,38 @@
-import nodemailer from 'nodemailer';
-import dotenv from 'dotenv';
+import axios from "axios";
+import dotenv from "dotenv";
+
 dotenv.config();
 
-const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST,
-  port:Number(process.env.SMTP_PORT || 587) ,
-  secure: false,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS,
-  },
-  
-});
-
-
-
-export const sendMail = async (to,subject,message) => {
+export const sendMail = async (to, subject, message) => {
   try {
-    await transporter.sendMail({
-      from: `"Bezubaan NGO" <${process.env.SMTP_USER}>`,
-      to,
-      subject,
-      html: message,
-    });
-    console.log('📧 Mail sent successfully');
+    await axios.post(
+      "https://api.brevo.com/v3/smtp/email",
+      {
+        sender: {
+          name: "Bezubaan Support",
+          email: "bezubaan@gmail.com", // must be verified in Brevo
+        },
+        to: [
+          {
+            email: to,
+          },
+        ],
+        subject: subject,
+        htmlContent: message,
+      },
+      {
+        headers: {
+          "api-key": process.env.BREVO_API_KEY,
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    console.log("📧 Mail sent successfully via Brevo");
   } catch (err) {
-    console.error('❌ Mail send error:', err.message);
+    console.error(
+      "❌ Brevo mail error:",
+      err.response?.data || err.message
+    );
   }
 };
