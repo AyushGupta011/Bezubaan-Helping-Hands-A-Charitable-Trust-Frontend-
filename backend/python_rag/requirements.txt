@@ -15,3 +15,5 @@ langchain-core
 python-dotenv
 gunicorn
 uvicorn[standard]
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch
