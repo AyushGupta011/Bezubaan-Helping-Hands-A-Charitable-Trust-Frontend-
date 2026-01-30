@@ -7,6 +7,8 @@ import { PawPrint, HandHeart, HeartHandshake, ChevronDown ,Menu,X} from "lucide-
 const Navbar = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+      const [desktopDropdownOpen, setDesktopDropdownOpen] = useState(false);
+      const [mobileDropdownOpen, setMobileDropdownOpen] = useState(false);
     const location = useLocation();
 
     // Hide navbar on admin routes
@@ -17,9 +19,12 @@ const Navbar = () => {
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
     }
-    const toggleDropdown = () => {
-        setDropdownOpen(!dropdownOpen);
-    }
+      const toggleDesktopDropdown = () => {
+        setDesktopDropdownOpen(!desktopDropdownOpen);
+      }
+      const toggleMobileDropdown = () => {
+        setMobileDropdownOpen(!mobileDropdownOpen);
+      }
   return (
     <div className='navbar w-full  p-4'>
     <div className=' navbar-container h-50 w-full mx-auto  flex justify-between px-10 '>
@@ -37,22 +42,22 @@ const Navbar = () => {
 <Link to="/report"><motion.h3 initial={{opacity:0,y:-20}} whileInView={{opacity:1,y:0}} transition={{ delay: 1, duration: 0.5 }} viewport={{once:true}}>Report Cruelty</motion.h3></Link>
         {/* Dropdown for Get Involved */}
         <div className='dropdown relative'>
-            <button className="flex items-center gap-2 bg-black-600  px-4 py-2 rounded-md hover:bg-black-700 transition" onClick={toggleDropdown}><motion.h3 initial={{opacity:0,y:-20}} whileInView={{opacity:1,y:0}} transition={{ delay: 1, duration: 0.5 }}
+          <button className="flex items-center gap-2 text-black px-4 py-2 rounded-md transition" onClick={toggleDesktopDropdown}><motion.h3 initial={{opacity:0,y:-20}} whileInView={{opacity:1,y:0}} transition={{ delay: 1, duration: 0.5 }}
           viewport={{ once: true}} >Get involved</motion.h3> <ChevronDown size={16} />
-</button>
-<AnimatePresence>
-            {dropdownOpen && (
-                <motion.div initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: "auto" }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.2 }}
-                 className='dropdown-menu absolute  bg-black text-white mt-2 py-2 rounded shadow-lg z-40 w-40'>
-                    <Link className='flex items-center gap-2 px-8 py-4 hover:text-black hover:bg-gray-100' to="/adopt"><PawPrint size={18} /><motion.h3 className='text-xl'>Adopt</motion.h3></Link>
-                    <Link className='flex items-center gap-2 px-8 py-4  hover:text-black hover:bg-gray-100' to="/volunteer"><HandHeart size={18} /><motion.h3 className='text-xl'>Volunteer</motion.h3></Link>
-                    <Link className='flex items-center gap-2 px-8 py-4  hover:text-black hover:bg-gray-100' to="/donate"><HeartHandshake size={18} /><motion.h3 className='text-xl'>Donate</motion.h3></Link>
-                </motion.div>
-            )}
-            </AnimatePresence>
+    </button>
+    <AnimatePresence>
+          {desktopDropdownOpen && (
+            <motion.div initial={{ opacity: 0, height: 0 }}
+          animate={{ opacity: 1, height: "auto" }}
+          exit={{ opacity: 0, height: 0 }}
+          transition={{ duration: 0.2 }}
+             className='navbar-dropdown-menu absolute bg-white text-black mt-2 py-2 rounded shadow-lg z-40 w-40'>
+              <Link className='flex items-center gap-2 px-8 py-4 hover:text-white hover:bg-black' to="/adopt"><PawPrint size={18} /><motion.h3 className='text-xl'>Adopt</motion.h3></Link>
+              <Link className='flex items-center gap-2 px-8 py-4  hover:text-white hover:bg-black' to="/volunteer"><HandHeart size={18} /><motion.h3 className='text-xl'>Volunteer</motion.h3></Link>
+              <Link className='flex items-center gap-2 px-8 py-4  hover:text-white hover:bg-black' to="/donate"><HeartHandshake size={18} /><motion.h3 className='text-xl'>Donate</motion.h3></Link>
+            </motion.div>
+          )}
+          </AnimatePresence>
         </div>
 <Link to="/contact"><motion.h3 initial={{opacity:0,y:-20}} whileInView={{opacity:1,y:0}} transition={{ delay:1, duration: 0.5 }} viewport={{once:true}}>Contact Us</motion.h3></Link>
         </div>
@@ -81,24 +86,24 @@ const Navbar = () => {
           {/* Dropdown inside mobile menu */}
           <div className='text-center '>
            <div className="button  mobile-menu-list">
-            <button className="flex items-center gap-2 bg-black-600  px-4 py-2 rounded-md hover:bg-black-700 transition" onClick={toggleDropdown}>
+            <button className="flex items-center gap-2  px-4 py-2 rounded-md text-white transition" onClick={toggleMobileDropdown}>
               <h3>Get involved</h3> <ChevronDown size={20} />
             </button>
            </div>
            <AnimatePresence>
-            {dropdownOpen && (
+            {mobileDropdownOpen && (
               <motion.div initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-               className='dropdown-menu flex flex-col w-full bg-white text-black mt-2 rounded shadow items-center'>
-                <Link to="/adopt" onClick={toggleMenu} className=' gap-5 px-4 py-2 hover:bg-gray-100'>
+               className='navbar-dropdown-menu-mobile flex flex-col w-full bg-white text-black mt-2 rounded shadow items-center'>
+                <Link to="/adopt" onClick={() => { setMenuOpen(false); setMobileDropdownOpen(false); }} className=' gap-5 px-4 py-2 hover:bg-black hover:text-white flex items-center justify-around'>
 <div className="flex gap-1.5"> <PawPrint size={20} /> <h3>Adopt</h3></div>
                 </Link>
-                <Link to="/volunteer" onClick={toggleMenu} className='flex items-center justify-around gap-5 px-4 py-2 hover:bg-gray-200'>
+                <Link to="/volunteer" onClick={() => { setMenuOpen(false); setMobileDropdownOpen(false); }} className='flex items-center justify-around gap-5 px-4 py-2 hover:bg-black hover:text-white'>
                   <div className="flex gap-1.5"><HandHeart size={20} /> <h3 className=''>Volunteer</h3></div>
                 </Link>
-                <Link to="/donate" onClick={toggleMenu} className='flex items-center justify-around gap-5 px-4 py-2 hover:bg-gray-100'>
+                <Link to="/donate" onClick={() => { setMenuOpen(false); setMobileDropdownOpen(false); }} className='flex items-center justify-around gap-5 px-4 py-2 hover:bg-black hover:text-white'>
 <div className="flex gap-1.5">                  <HeartHandshake size={20} /> <h3>Donate</h3></div>
                 </Link>
               </motion.div>
