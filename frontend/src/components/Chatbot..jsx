@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const WEBHOOK_URL = import.meta.env.VITE_CHATBOT_WEBHOOK_URL || 'http://localhost:8000/rag/chat';
+const WEBHOOK_URL = import.meta.env.CHATBOT || 'http://localhost:8000/rag/chat';
 
 export default function Chatbot() {
   const [open, setOpen] = useState(false);

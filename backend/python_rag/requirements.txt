@@ -11,4 +11,7 @@ langchain-groq
 langchain-huggingface 
 sentence-transformers
 huggingface-hub
+langchain-core
 python-dotenv
+gunicorn
+uvicorn[standard]
