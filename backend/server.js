@@ -7,6 +7,8 @@ import contactRoutes from './routes/contactRoutes.js'
 import volunteerRoutes from './routes/volunteerRoutes.js'
 import reportRoutes from './routes/reportRoutes.js'
 import donationRoutes from './routes/donationRoutes.js'
+import adminRoutes from './routes/adminRoutes.js'
+
 dotenv.config();
 connectDB();
 
@@ -33,6 +35,7 @@ app.use('/contact', contactRoutes);
 app.use('/volunteer',volunteerRoutes)
 app.use('/report', reportRoutes);
 app.use('/donations', donationRoutes);
+app.use('/api/admin', adminRoutes);
 
 
 

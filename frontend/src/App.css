@@ -10,7 +10,6 @@
 }
 
 body {
-  overflow-y: auto !important;
   font-family: 'Inter', sans-serif;
   /* background-color: #fff8f0; */
   color: #333;

@@ -7,6 +7,7 @@ const donationSchema = new mongoose.Schema({
   message: { type: String },
   orderId: { type: String },
   paymentId: { type: String },
+  transactionId: { type: String },
   paymentStatus: { type: String, enum: ['PENDING','SUCCESS','FAILED'], default: 'PENDING' },
   createdAt: { type: Date, default: Date.now }
 });

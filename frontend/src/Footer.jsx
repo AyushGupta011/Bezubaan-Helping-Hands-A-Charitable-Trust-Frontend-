@@ -1,9 +1,16 @@
 import React from 'react'
-import { Link } from 'react-router'
+import { Link, useLocation } from 'react-router-dom'
 import { PawPrint, Facebook, Instagram, MapPin } from 'lucide-react'
 import { motion } from 'motion/react'
 
 const Footer = () => {
+  const location = useLocation();
+
+  // Hide footer on admin routes
+  if (location.pathname.startsWith('/admin')) {
+    return null;
+  }
+
   return (
     <footer className="w-full footer bg-gray-50 text-gray-700 pt-8 pb-6">
       {/* Main Footer Content */}

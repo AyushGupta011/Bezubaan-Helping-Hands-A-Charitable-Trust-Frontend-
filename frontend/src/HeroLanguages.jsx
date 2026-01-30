@@ -12,8 +12,8 @@ import { motion, AnimatePresence, scale } from "motion/react";
  * Stops automatically after the last slide.
  */
 export default function HeroLanguages({
-  displayDuration = 2000,
-  animationDuration = 500,
+  displayDuration = 200,
+  animationDuration = 100,
   onFinish
 }) {
   const translations = [
@@ -121,29 +121,6 @@ export default function HeroLanguages({
           </AnimatePresence>
         </div>
 
-        {/* <div className="mt-6 flex items-center justify-center gap-4">
-          <div className="text-sm text-gray-600">
-            {finished ? (
-              <span>Completed ({translations.length} languages)</span>
-            ) : (
-              <span>
-                Showing {index + 1} of {translations.length}
-              </span>
-            )}
-          </div>
-
-          <div className="flex gap-2">
-            {translations.map((t, i) => (
-              <div
-                key={i}
-                className={`w-2 h-2 rounded-full ${
-                  i === index ? "bg-blue-600" : "bg-gray-300"
-                }`}
-                aria-hidden
-              />
-            ))}
-          </div>
-        </div> */}
       </div>
       
     </section>

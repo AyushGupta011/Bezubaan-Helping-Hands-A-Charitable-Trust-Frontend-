@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router'
+import { Link, useLocation } from 'react-router-dom'
 import { motion ,AnimatePresence } from "motion/react";
 import { PawPrint, HandHeart, HeartHandshake, ChevronDown ,Menu,X} from "lucide-react";
 
@@ -7,6 +7,12 @@ import { PawPrint, HandHeart, HeartHandshake, ChevronDown ,Menu,X} from "lucide-
 const Navbar = () => {
     const [dropdownOpen, setDropdownOpen] = useState(false);
     const [menuOpen, setMenuOpen] = useState(false);
+    const location = useLocation();
+
+    // Hide navbar on admin routes
+    if (location.pathname.startsWith('/admin')) {
+      return null;
+    }
 
     const toggleMenu = () => {
         setMenuOpen(!menuOpen);
