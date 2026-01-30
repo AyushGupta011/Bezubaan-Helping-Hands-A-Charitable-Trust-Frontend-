@@ -50,9 +50,10 @@ class MessageIn(BaseModel):
 
 def get_embeddings():
     """Helper to initialize HuggingFace Embeddings (Runs locally)."""
-    from langchain_huggingface import HuggingFaceEmbeddings
+    from langchain_huggingface import HuggingFaceEndpointEmbeddings
     # 'all-MiniLM-L6-v2' is fast and efficient for local use
-    return HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+    return HuggingFaceEndpointEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2",
+                                         huggingfacehub_api_token=os.environ.get("HUGGINGFACEHUB_API_TOKEN"))
 
 @app.post('/rag/build')
 async def build_index():
