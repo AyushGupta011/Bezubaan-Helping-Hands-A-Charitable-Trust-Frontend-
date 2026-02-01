@@ -107,21 +107,21 @@ async def init_chain(app: FastAPI):
     logger.info("🚀 Initializing Bezubaan RAG...")
 
     # 1. Process local files for indexing
-    root_dir = Config.get_root_dir()
-    texts, metadatas = [], []
+    # root_dir = Config.get_root_dir()
+    # texts, metadatas = [], []
     
-    if root_dir.exists():
-        splitter = CharacterTextSplitter(chunk_size=Config.CHUNK_SIZE, chunk_overlap=Config.CHUNK_OVERLAP)
-        for f in root_dir.rglob("*"):
-            if f.suffix in Config.ALLOWED_EXTENSIONS:
-                raw = f.read_text(encoding="utf8", errors="ignore")
-                clean = strip_jsx(raw)
-                for i, chunk in enumerate(splitter.split_text(clean)):
-                    texts.append(chunk)
-                    metadatas.append({"source": f.name, "chunk": i})
-        logger.info(f"📄 Found {len(texts)} text chunks to index.")
-    else:
-        logger.warning(f"⚠️ Source directory {root_dir} not found. Skipping file indexing.")
+    # if root_dir.exists():
+    #     splitter = CharacterTextSplitter(chunk_size=Config.CHUNK_SIZE, chunk_overlap=Config.CHUNK_OVERLAP)
+    #     for f in root_dir.rglob("*"):
+    #         if f.suffix in Config.ALLOWED_EXTENSIONS:
+    #             raw = f.read_text(encoding="utf8", errors="ignore")
+    #             clean = strip_jsx(raw)
+    #             for i, chunk in enumerate(splitter.split_text(clean)):
+    #                 texts.append(chunk)
+    #                 metadatas.append({"source": f.name, "chunk": i})
+    #     logger.info(f"📄 Found {len(texts)} text chunks to index.")
+    # else:
+    #     logger.warning(f"⚠️ Source directory {root_dir} not found. Skipping file indexing.")
 
     # 2. Connect to Pinecone
     pc = Pinecone(api_key=Config.PINECONE_API_KEY)
@@ -134,24 +134,24 @@ async def init_chain(app: FastAPI):
     )
 
     # 3. Add texts if any were found
-    if texts:
-        vectorstore.add_texts(texts=texts, metadatas=metadatas)
-        logger.info("✅ Successfully uploaded chunks to Pinecone.")
+    # if texts:
+    #     vectorstore.add_texts(texts=texts, metadatas=metadatas)
+    #     logger.info("✅ Successfully uploaded chunks to Pinecone.")
 
 
     
-    index_name = "bezubaan-chatbot"
+    # index_name = "bezubaan-chatbot"
 
-    if not pc.has_index(index_name):
-       pc.create_index_for_model(
-        name=index_name,
-        cloud="aws",
-        region="us-east-1",
-        embed={
-            "model":"llama-text-embed-v2",
-            "field_map":{"text": "chunk_text"}
-        }
-    )
+    # if not pc.has_index(index_name):
+    #    pc.create_index_for_model(
+    #     name=index_name,
+    #     cloud="aws",
+    #     region="us-east-1",
+    #     embed={
+    #         "model":"llama-text-embed-v2",
+    #         "field_map":{"text": "chunk_text"}
+    #     }
+    # )
 
     # 4. Create Chain
     prompt = PromptTemplate(
