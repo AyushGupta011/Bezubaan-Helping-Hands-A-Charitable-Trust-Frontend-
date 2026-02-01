@@ -1,87 +1,188 @@
 import os
 import re
+import logging
 from pathlib import Path
 from typing import List, Optional, Tuple
 from functools import lru_cache
-import logging
+from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field
 from dotenv import load_dotenv
-from langchain_core.prompts import PromptTemplate
 
+from pinecone import Pinecone
+from langchain_pinecone import PineconeVectorStore
+from langchain_core.prompts import PromptTemplate
+from langchain_classic.chains import ConversationalRetrievalChain
+from langchain_text_splitters import CharacterTextSplitter
+
+# Initialize logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 load_dotenv()
 
-app = FastAPI(title="Bezubaan RAG API", version="1.0.0")
+# Global variable for the RAG chain
+chain = None
 
 # ============================================================================
 # Configuration
 # ============================================================================
 
 class Config:
-    """Centralized configuration for the application"""
     ALLOW_ORIGINS = os.getenv('RAG_ALLOW_ORIGINS', '*')
     HUGGINGFACE_TOKEN = os.getenv("HUGGINGFACEHUB_API_TOKEN")
     GROQ_API_KEY = os.getenv("GROQ_API_KEY")
+    PINECONE_API_KEY = os.getenv("PINECONE_API_KEY")
+    PINECONE_INDEX = os.getenv("PINECONE_INDEX_NAME", "bezubaan-chatbot")
     
-    # Model settings
     EMBEDDING_MODEL = "sentence-transformers/all-MiniLM-L6-v2"
     LLM_MODEL = "llama-3.3-70b-versatile"
     LLM_TEMPERATURE = 0.2
     
-    # Chunking settings
     CHUNK_SIZE = 1000
     CHUNK_OVERLAP = 200
-    
-    # Retrieval settings
     RETRIEVAL_K = 3
     
-    # File processing
     ALLOWED_EXTENSIONS = {'.js', '.jsx', '.html', '.md'}
     
     @classmethod
     def get_root_dir(cls) -> Path:
-        """Get root directory for frontend files"""
-        return Path(__file__).resolve().parents[2] / 'frontend' / 'src'
+        # Adjusted to find the src folder relative to this script
+        """
+        Navigates: 
+        1. some_subfolder/ (current)
+        2. backend/ (.parent)
+        3. bezubaaan(pending)/ (.parent.parent)
+        4. frontend/src/
+        """
+        # Get the directory of app.py
+        current_dir = Path(__file__).resolve().parent
+        
+        # Go up two levels to reach the main project root
+        project_root = current_dir.parent.parent
+        
+        target = project_root / 'frontend' / 'src'
+        
+        # This will print the path in your console so you can double-check it
+        print(f"DEBUG: Looking for frontend at: {target.absolute()}")
+        
+        return target
     
-    @classmethod
-    def get_persist_dir(cls) -> Path:
-        """Get persistence directory for vector DB"""
-        return Path(__file__).resolve().parents[1] / 'data' / 'chroma'
-    
-    @classmethod
-    def validate(cls):
-        """Validate required environment variables"""
-        if not cls.HUGGINGFACE_TOKEN:
-            logger.warning("HUGGINGFACEHUB_API_TOKEN not set")
-        if not cls.GROQ_API_KEY:
-            logger.warning("GROQ_API_KEY not set")
-
-Config.validate()
 
 # ============================================================================
-# CORS Setup
+# Utility Functions
 # ============================================================================
 
-origins = ['*'] if Config.ALLOW_ORIGINS == '*' else [
-    o.strip() for o in Config.ALLOW_ORIGINS.split(',') if o.strip()
-]
+def strip_jsx(text: str) -> str:
+    text = re.sub(r'<[^>]*>', ' ', text)
+    text = re.sub(r'\{[^}]*\}', ' ', text)
+    return ' '.join(text.split())
+
+@lru_cache(maxsize=1)
+def get_embeddings():
+    from langchain_huggingface import HuggingFaceEndpointEmbeddings
+    return HuggingFaceEndpointEmbeddings(
+        model=Config.EMBEDDING_MODEL,
+        huggingfacehub_api_token=Config.HUGGINGFACE_TOKEN
+    )
+
+@lru_cache(maxsize=1)
+def get_llm():
+    from langchain_groq import ChatGroq
+    return ChatGroq(
+        temperature=Config.LLM_TEMPERATURE,
+        model=Config.LLM_MODEL,
+        groq_api_key=Config.GROQ_API_KEY
+    )
+
+# ============================================================================
+# Lifespan (Startup/Shutdown)
+# ============================================================================
+
+@asynccontextmanager
+async def init_chain(app: FastAPI):
+    global chain
+    logger.info("🚀 Initializing Bezubaan RAG...")
+
+    # 1. Process local files for indexing
+    root_dir = Config.get_root_dir()
+    texts, metadatas = [], []
+    
+    if root_dir.exists():
+        splitter = CharacterTextSplitter(chunk_size=Config.CHUNK_SIZE, chunk_overlap=Config.CHUNK_OVERLAP)
+        for f in root_dir.rglob("*"):
+            if f.suffix in Config.ALLOWED_EXTENSIONS:
+                raw = f.read_text(encoding="utf8", errors="ignore")
+                clean = strip_jsx(raw)
+                for i, chunk in enumerate(splitter.split_text(clean)):
+                    texts.append(chunk)
+                    metadatas.append({"source": f.name, "chunk": i})
+        logger.info(f"📄 Found {len(texts)} text chunks to index.")
+    else:
+        logger.warning(f"⚠️ Source directory {root_dir} not found. Skipping file indexing.")
+
+    # 2. Connect to Pinecone
+    pc = Pinecone(api_key=Config.PINECONE_API_KEY)
+    embeddings = get_embeddings()
+    
+    vectorstore = PineconeVectorStore(
+        index_name=Config.PINECONE_INDEX,
+        embedding=embeddings,
+        pinecone_api_key=Config.PINECONE_API_KEY
+    )
+
+    # 3. Add texts if any were found
+    if texts:
+        vectorstore.add_texts(texts=texts, metadatas=metadatas)
+        logger.info("✅ Successfully uploaded chunks to Pinecone.")
+
+
+    
+    index_name = "bezubaan-chatbot"
+
+    if not pc.has_index(index_name):
+       pc.create_index_for_model(
+        name=index_name,
+        cloud="aws",
+        region="us-east-1",
+        embed={
+            "model":"llama-text-embed-v2",
+            "field_map":{"text": "chunk_text"}
+        }
+    )
+
+    # 4. Create Chain
+    prompt = PromptTemplate(
+        template=BEZUBAAN_PROMPT,
+        input_variables=["context", "chat_history", "question"]
+    )
+
+    chain = ConversationalRetrievalChain.from_llm(
+        llm=get_llm(),
+        retriever=vectorstore.as_retriever(search_kwargs={"k": Config.RETRIEVAL_K}),
+        combine_docs_chain_kwargs={"prompt": prompt},
+        return_source_documents=True
+    )
+
+    logger.info("✅ Bezubaan RAG System Ready")
+    yield
+    logger.info("🛑 Shutting down...")
+
+# ============================================================================
+# FastAPI Setup
+# ============================================================================
+
+app = FastAPI(title="Bezubaan RAG API", lifespan=init_chain)
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=['*'],
     allow_credentials=True,
     allow_methods=['*'],
     allow_headers=['*'],
 )
-
-# ============================================================================
-# Prompts
-# ============================================================================
 
 BEZUBAAN_PROMPT = """You are the official Bezubaan AI Assistant for Bezubaan NGO. 
 Bezubaan NGO was started with a mission to be the voice for the voiceless. It focuses on rescuing stray animals, providing medical treatments, and finding forever homes for abandoned pets. It started when a group of animal lovers noticed the lack of emergency care for street animals and decided to create a dedicated network of caretakers and medical aid.
@@ -109,142 +210,33 @@ Human Question:
 
 AI Assistant:"""
 
-# =============================================================================
-# Models
-# =============================================================================
-
 class MessageIn(BaseModel):
-    message: str = Field(..., min_length=1, max_length=5000)
-    history: List[Tuple[str, str]] = Field(default_factory=list)
-
-# =============================================================================
-# Utility Functions
-# =============================================================================
-
-def strip_jsx(text: str) -> str:
-    text = re.sub(r'<[^>]*>', ' ', text)
-    text = re.sub(r'\{[^}]*\}', ' ', text)
-    return ' '.join(text.split())
-
-@lru_cache(maxsize=1)
-def get_embeddings():
-    from langchain_huggingface import HuggingFaceEndpointEmbeddings
-    logger.info(f'Initializing embeddings: {Config.EMBEDDING_MODEL}')
-    return HuggingFaceEndpointEmbeddings(
-        model=Config.EMBEDDING_MODEL,
-        huggingfacehub_api_token=Config.HUGGINGFACE_TOKEN
-    )
-
-@lru_cache(maxsize=1)
-def get_llm():
-    from langchain_groq import ChatGroq
-    logger.info(f'Initializing LLM: {Config.LLM_MODEL}')
-    return ChatGroq(
-        temperature=Config.LLM_TEMPERATURE,
-        model=Config.LLM_MODEL,
-        groq_api_key=Config.GROQ_API_KEY
-    )
-
-# =============================================================================
-# API Endpoints
-# =============================================================================
+    message: str
+    history: List[Tuple[str, str]] = []
 
 @app.get('/')
 async def root():
-    return {'ok': True, 'message': 'Bezubaan RAG API is running', 'version': '1.0.0'}
-
-@app.get('/health')
-async def health_check():
-    persist_dir = Config.get_persist_dir()
-    return {'status': 'healthy', 'index_exists': persist_dir.exists()}
-
-@app.post('/rag/build')
-async def build_index():
-    try:
-        root_dir = Config.get_root_dir()
-        persist_dir = Config.get_persist_dir()
-        
-        files = [p for p in root_dir.rglob('*') if p.suffix in Config.ALLOWED_EXTENSIONS]
-        texts, metadatas = [], []
-        
-        from langchain_text_splitters import CharacterTextSplitter
-        from langchain_community.vectorstores import Chroma
-        
-        embeddings = get_embeddings()
-        splitter = CharacterTextSplitter(
-            chunk_size=Config.CHUNK_SIZE,
-            chunk_overlap=Config.CHUNK_OVERLAP
-        )
-        
-        for f in files:
-            raw = f.read_text(encoding='utf8', errors='ignore')
-            txt = strip_jsx(raw).strip()
-            if not txt: continue
-            
-            chunks = splitter.split_text(txt)
-            for i, c in enumerate(chunks):
-                texts.append(c)
-                metadatas.append({'source': str(f.relative_to(root_dir)), 'chunk': i})
-        
-        if not texts:
-            return {'ok': True, 'count': 0}
-        
-        persist_dir.mkdir(parents=True, exist_ok=True)
-        Chroma.from_texts(texts=texts, embedding=embeddings, metadatas=metadatas, persist_directory=str(persist_dir))
-        
-        logger.info(f'Built index with {len(texts)} chunks')
-        return {'ok': True, 'count': len(texts)}
-        
-    except Exception as e:
-        logger.error(f'Build error: {e}', exc_info=True)
-        raise HTTPException(status_code=500, detail=str(e))
+    return {'status': 'online', 'agent': 'Bezubaan AI'}
 
 @app.post('/rag/chat')
-async def rag_chat(request: Request, body: Optional[MessageIn] = None):
+async def rag_chat(body: MessageIn):
+    global chain
+    if not chain:
+        raise HTTPException(status_code=503, detail="System initializing...")
+    
     try:
-        if body:
-            message, history = body.message, body.history or []
-        else:
-            data = await request.json()
-            message, history = data.get('message'), data.get('history', [])
-        
-        if not message:
-            raise HTTPException(status_code=400, detail='Missing message')
-        
-        persist_dir = Config.get_persist_dir()
-        if not persist_dir.exists():
-            raise HTTPException(status_code=400, detail='Index not built. Run /rag/build first.')
-        
-        from langchain_community.vectorstores import Chroma
-        from langchain_classic.chains import ConversationalRetrievalChain
-        
-        embeddings = get_embeddings()
-        llm = get_llm()
-        
-        db = Chroma(persist_directory=str(persist_dir), embedding_function=embeddings)
-        retriever = db.as_retriever(search_kwargs={'k': Config.RETRIEVAL_K})
-        
-        custom_prompt = PromptTemplate(
-            template=BEZUBAAN_PROMPT,
-            input_variables=['context', 'chat_history', 'question']
-        )
-        
-        chain = ConversationalRetrievalChain.from_llm(
-            llm=llm,
-            retriever=retriever,
-            combine_docs_chain_kwargs={'prompt': custom_prompt},
-            return_source_documents=True
-        )
-        
-        res = chain.invoke({'question': message, 'chat_history': history})
-        
-        logger.info(f'Chat request processed successfully')
-        
+        res = chain.invoke({
+            'question': body.message,
+            'chat_history': body.history
+        })
         return {
             'reply': res['answer'],
             'source_documents': [doc.metadata for doc in res['source_documents']]
         }
-        
     except Exception as e:
-        logger.error(f'Chat error: {e}', exc_info=True)
+        logger.error(f"Chat error: {e}")
         raise HTTPException(status_code=500, detail=str(e))
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)
