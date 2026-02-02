@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const WEBHOOK_URL = import.meta.env.CHATBOT || 'http://localhost:8000/rag/chat';
+const WEBHOOK_URL = import.meta.env.VITE_CHATBOT || 'http://localhost:8000';
 
 export default function Chatbot() {
   const [open, setOpen] = useState(false);
@@ -9,45 +9,42 @@ export default function Chatbot() {
   ]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  
-  // New state to track history for the backend RAG chain
-  // Format: [["User query", "Bot response"], ...]
+
+
   const [chatHistory, setChatHistory] = useState([]);
 
   const sendMessage = async () => {
     if (!input.trim()) return;
 
     const userMessage = input;
-    
-    // Update UI immediately
+
+
     setMessages((prev) => [...prev, { sender: "user", text: userMessage }]);
     setInput("");
     setLoading(true);
 
     try {
-      const res = await fetch(WEBHOOK_URL, {
+      const res = await fetch(`${WEBHOOK_URL}/rag/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           message: userMessage,
           history: chatHistory // Send the existing history
         }),
       });
 
       const data = await res.json();
-      
+
       if (!res.ok) throw new Error(data.detail || "Server error");
 
       const botReply = data.reply;
 
-      // 1. Update UI messages
       setMessages((prev) => [
         ...prev,
         { sender: "bot", text: botReply },
       ]);
 
-      // 2. Update memory for the next turn
-      // We append the latest turn: [question, answer]
+
       setChatHistory((prev) => [...prev, [userMessage, botReply]]);
 
     } catch (error) {
@@ -66,12 +63,12 @@ export default function Chatbot() {
 
   return (
     <>
-      {/* Floating Button */}
+
       <button style={styles.fab} onClick={() => setOpen(!open)}>
         🐾
       </button>
 
-      {/* Chat Box */}
+
       {open && (
         <div style={styles.chatbox}>
           <div style={styles.header}>
@@ -114,9 +111,9 @@ export default function Chatbot() {
   );
 }
 
-// ... (Styles remain exactly as you had them)
+
 const styles = {
-  // ... Paste your existing styles here ...
+
   fab: {
     position: "fixed",
     bottom: 20,

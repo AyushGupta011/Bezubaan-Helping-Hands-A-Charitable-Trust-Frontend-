@@ -26,9 +26,7 @@ load_dotenv()
 # Global variable for the RAG chain
 chain = None
 
-# ============================================================================
-# Configuration
-# ============================================================================
+## configuration
 
 class Config:
     ALLOW_ORIGINS = os.getenv('RAG_ALLOW_ORIGINS', '*')
@@ -71,9 +69,7 @@ class Config:
         return target
     
 
-# ============================================================================
-# Utility Functions
-# ============================================================================
+## utility functions
 
 def strip_jsx(text: str) -> str:
     text = re.sub(r'<[^>]*>', ' ', text)
@@ -97,9 +93,7 @@ def get_llm():
         groq_api_key=Config.GROQ_API_KEY
     )
 
-# ============================================================================
-# Lifespan (Startup/Shutdown)
-# ============================================================================
+## lifespan
 
 @asynccontextmanager
 async def init_chain(app: FastAPI):
@@ -111,13 +105,12 @@ async def init_chain(app: FastAPI):
     # Validate keys
     if not Config.PINECONE_API_KEY or not Config.HUGGINGFACE_TOKEN or not Config.GROQ_API_KEY:
         logger.error("❌ Missing API Keys! Check your .env or Render Environment Variables.")
-        # We don't raise here to allow the app to start (and fail gracefully on requests)
-        # But for RAG to work, we return early
+       
         yield
         return
 
     try:
-        # 2. Connect to Pinecone
+        # Connect to Pinecone
         pc = Pinecone(api_key=Config.PINECONE_API_KEY)
         embeddings = get_embeddings()
         
@@ -127,7 +120,7 @@ async def init_chain(app: FastAPI):
             pinecone_api_key=Config.PINECONE_API_KEY
         )
 
-        # 4. Create Chain
+        # Create Chain
         prompt = PromptTemplate(
             template=BEZUBAAN_PROMPT,
             input_variables=["context", "chat_history", "question"]
@@ -148,9 +141,7 @@ async def init_chain(app: FastAPI):
     yield
     logger.info("🛑 Shutting down...")
 
-# ============================================================================
-# FastAPI Setup
-# ============================================================================
+## fastapi setup
 
 app = FastAPI(title="Bezubaan RAG API", lifespan=init_chain)
 
