@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import {motion} from "motion/react";
+import { toast } from 'react-toastify';
 import { FaPaw, FaHandPaper, FaDog, FaBolt, FaClock } from 'react-icons/fa';
 import api from "./utils/api";
 const crueltyTypes = [
@@ -40,8 +41,7 @@ const Report = () => {
     image: null,
   });
 
-  const [status, setStatus] = useState("");
-  const [statusType,setStatusType]=useState("");
+  // using toast notifications instead of inline status
 
   const handleChange = (e) => {
     if (e.target.type === "file") {
@@ -53,8 +53,8 @@ const Report = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus("Submitting...");
-    setStatusType("");
+    // optional: show an info toast while submitting
+    // toast.info("Submitting...");
 
     const data = new FormData();
     Object.keys(formData).forEach((key) => {
@@ -65,8 +65,7 @@ const Report = () => {
       const res = await api.post("/report/new",formData);
 
       if (res.data.success) {
-   setStatus(`✅ ${res.data.message}`);
-        setStatusType("success");
+    toast.success(res.data.message || "Report submitted successfully");
     
         setFormData({
           name: "",
@@ -78,13 +77,11 @@ const Report = () => {
           image: null,
         });
       } else {
-        setStatus("Error submitting report ❌,Please try again later.");
-        setStatusType("error")
+        toast.error("Error submitting report. Please try again later.")
       }
     } catch (error) {
-      setStatus("Server error ❌,,Please try again later .");
+      toast.error("Server error. Please try again later.");
        console.error("Error:",error);
-      setStatusType("error");
     }
   };
 
@@ -278,16 +275,7 @@ const Report = () => {
         </motion.button>
       </form>
 
-      {status && <motion.p
-       initial={{opacity:0,y:-20}}
-          whileInView={{opacity:1,y:0}}
-          transition={{delay:0.3 , duration:0.5}}
-          viewport={{once:true}}
-       className={`mt-4 text-center text-sm ${
-            statusType === "success"
-              ? " text-green-700 "
-              : " text-red-700  "
-          }`}>{status}</motion.p>}
+      {/* Notifications use react-toastify (global ToastContainer in App.jsx) */}
     </div>
 
     </div>

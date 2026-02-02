@@ -51,7 +51,7 @@ const Navbar = () => {
           animate={{ opacity: 1, height: "auto" }}
           exit={{ opacity: 0, height: 0 }}
           transition={{ duration: 0.2 }}
-             className='navbar-dropdown-menu absolute bg-white text-black mt-2 py-2 rounded shadow-lg z-40 w-40'>
+             className='dropdown-menu absolute bg-white text-black mt-2 py-2 rounded border-b-black shadow-lg z-40 w-40'>
               <Link className='flex items-center gap-2 px-8 py-4 hover:text-white hover:bg-black' to="/adopt"><PawPrint size={18} /><motion.h3 className='text-xl'>Adopt</motion.h3></Link>
               <Link className='flex items-center gap-2 px-8 py-4  hover:text-white hover:bg-black' to="/volunteer"><HandHeart size={18} /><motion.h3 className='text-xl'>Volunteer</motion.h3></Link>
               <Link className='flex items-center gap-2 px-8 py-4  hover:text-white hover:bg-black' to="/donate"><HeartHandshake size={18} /><motion.h3 className='text-xl'>Donate</motion.h3></Link>
@@ -96,7 +96,7 @@ const Navbar = () => {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3 }}
-               className='navbar-dropdown-menu-mobile flex flex-col w-full bg-white text-black mt-2 rounded shadow items-center'>
+               className='mobile-menu flex flex-col w-full bg-white text-black mt-2 rounded shadow items-center'>
                 <Link to="/adopt" onClick={() => { setMenuOpen(false); setMobileDropdownOpen(false); }} className=' gap-5 px-4 py-2 hover:bg-black hover:text-white flex items-center justify-around'>
 <div className="flex gap-1.5"> <PawPrint size={20} /> <h3>Adopt</h3></div>
                 </Link>

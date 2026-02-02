@@ -1,5 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './App.css'
+import { ToastContainer } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import Home from './Home.jsx'
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'
 import Navbar from './Navbar.jsx'
@@ -147,6 +149,7 @@ const App = () => {
           {/* Chatbot (hidden on admin routes) */}
           {!window.location.pathname.startsWith('/admin') && <Chatbot />}
           <Footer />
+          <ToastContainer position="top-right" autoClose={5000} hideProgressBar={false} newestOnTop={false} closeOnClick rtl={false} pauseOnFocusLoss draggable pauseOnHover />
         </motion.div>
       )}
     </Router>

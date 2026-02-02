@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import {motion} from "motion/react"
 import api from "./utils/api.js";
+import { toast } from "react-toastify";
 const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     message: "",
   });
-  const [status,setStatus]=useState("");
-  const [statusType,setStatusType]=useState("")
+  // using toast notifications instead of inline status
 
 
   const handleChange = (e) => {
@@ -21,27 +21,23 @@ const Contact = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Submitting contact form:", formData);
-    setStatus("");
-    setStatusType("");
+    // clear not needed when using toast
   
 
     try {
       const res= await api.post("/contact/add",formData);
 
       if(res.data.success){
-         setStatus(`✅ ${res.data.message}`);
-        setStatusType("success");
+         toast.success(res.data.message || "Message sent successfully");
         setFormData({ name: "", email: "", message: "" });
       }else{
-        setStatus("❌ Failed to send message. Please try again later.")
-        setStatusType("error")
+        toast.error("Failed to send message. Please try again later.")
       }
 
       
     } catch (error) {
       console.error("Error:",error);
-      setStatus("Server error,Please try again later .");
-      setStatusType("error");
+      toast.error("Server error. Please try again later.");
       
     
     }
@@ -56,13 +52,13 @@ const Contact = () => {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         viewport={{ once: true }}
-        className="text-center max-w-3xl"
+        className="text-center "
       >
         <h1 className="text-4xl md:text-5xl font-bold text-black mb-4">
           Contact Bezubaan NGO
         </h1>
         <p className="text-gray-700 text-lg mb-6">
-          Bezubaan NGO is a dedicated organization working to **rescue, rehabilitate, and protect street animals**. Our mission is to create a safer and healthier environment for animals who cannot speak for themselves.
+          Bezubaan NGO is a dedicated organization working to rescue, rehabilitate, and protect street animals. Our mission is to create a safer and healthier environment for animals who cannot speak for themselves.
         </p>
       </motion.div>
 
@@ -72,17 +68,17 @@ const Contact = () => {
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3, duration: 0.6 }}
         viewport={{ once: true }}
-        className="text-center max-w-4xl mt-8"
+        className="text-starts mt-8"
       >
 
         <p className="text-gray-700 mb-4">
-          Founded with the vision of giving voice to the voiceless, Bezubaan NGO focuses on providing **medical care, food, shelter, and protection** to stray animals. We conduct rescue operations for injured or abandoned animals, run awareness campaigns, and collaborate with communities to promote responsible pet ownership.
+          Founded with the vision of giving voice to the voiceless, Bezubaan NGO focuses on providing medical care, food, shelter, and protection to stray animals. We conduct rescue operations for injured or abandoned animals, run awareness campaigns, and collaborate with communities to promote responsible pet ownership.
         </p>
         <p className="text-gray-700 mb-4">
           Over the years, we have helped thousands of animals across multiple cities. Our volunteers play a critical role in feeding, rescuing, and rehabilitating animals, and we rely on community support to sustain our initiatives.
         </p>
         <p className="text-gray-700">
-          Whether you want to **volunteer, donate, or report a case of animal cruelty**, we encourage you to reach out. Every small effort helps us save lives and spread compassion.
+          Whether you want to volunteer, donate, or report a case of animal cruelty, we encourage you to reach out. Every small effort helps us save lives and spread compassion.
         </p>
       </motion.div>
 
@@ -97,20 +93,7 @@ const Contact = () => {
           viewport={{once:true}} className="text-center mb-8 page-p">
         We’d love to hear from you! Fill out the form below and we’ll get back to you as soon as possible.
       </motion.p>
-       {status && (
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          className={`mt-6   text-center items-center text-lg font-medium ${
-            statusType === "success"
-              ? " text-green-700 "
-              : " text-red-700  "
-          }`}
-        >
-          {status}
-        
-        </motion.p>
-      )}
+      {/* toasts are handled by global ToastContainer in App.jsx */}
 
       {/* Contact Form */}
       <form onSubmit={handleSubmit} className="contact-form flex items-center flex-col gap-4">

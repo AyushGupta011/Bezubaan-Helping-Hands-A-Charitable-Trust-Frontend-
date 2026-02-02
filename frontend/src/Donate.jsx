@@ -110,10 +110,13 @@ const Donate = () => {
         <p className="">Make your special day even more meaningful by sharing it with those who need your love the most – our rescued street animals. ❤️
          
           Instead of just cakes and candles, celebrate by:
-          <ul className="list-disc pl-6 mt-2">
-            <li>🐶 Feeding rescued animals a special meal</li>
+          <ul className="list-disc items-start pl-6 mt-2">
+            {/* <li>🐶 Feeding rescued animals a special meal</li>
             <li>🐾 Donating for their medical care and shelter</li>
-            <li>📸 Sharing your wishes and kindness with them</li>
+            <li>📸 Sharing your wishes and kindness with them</li> */}
+            <p>🐶 Organizing a feeding drive for street animals</p>
+            <p>📸 Spreading awareness about animal welfare</p>
+            <p>🐾 Donating to support their medical care and shelter</p>
           </ul>
           <br />
           Your birthday can bring hope, joy, and wagging tails to countless innocent souls. Together, we can turn your celebration into a day of love, compassion, and change. 🌟

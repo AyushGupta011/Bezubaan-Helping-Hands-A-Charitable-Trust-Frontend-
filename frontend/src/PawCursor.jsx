@@ -12,7 +12,7 @@ export default function PawCursor() {
   return (
     <>
       <div
-        className="fixed top-0 left-0 z-99999 pointer-events-none"
+        className="fixed top-0 left-0 z-99999 s-[none] pointer-events-none"
         style={{
           transform: `translate(${pos.x}px, ${pos.y}px)`,
         }}

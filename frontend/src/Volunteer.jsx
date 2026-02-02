@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import api from './utils/api';
+import { toast } from 'react-toastify';
 
 const Volunteer = () => {
   const [formData, setFormData] = useState({
@@ -11,8 +12,7 @@ const Volunteer = () => {
     availability: '',
     message: ''
   });
-const [status,setStatus]=useState("");
-  const [statusType, setStatusType] = useState("");
+  // using toast notifications instead of inline status
 
   const handleChange = (e) => {
     setFormData({...formData, [e.target.name]: e.target.value});
@@ -20,14 +20,12 @@ const [status,setStatus]=useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus("");
-    setStatusType("");
+    // no local status state needed when using toast
 
     try {
       const res=await api.post("/volunteer/new",formData)
        if(res.data.success){
-         setStatus(`✅ ${res.data.message}`);
-        setStatusType("success");
+         toast.success(res.data.message || "Submitted successfully");
          setFormData({
       name: '',
       email: '',
@@ -37,13 +35,11 @@ const [status,setStatus]=useState("");
       message: ''
     });
       }else{
-        setStatus("❌ Failed to submit form. Please try again later.")
-        setStatusType("error")
+        toast.error("Failed to submit form. Please try again later.")
       }
     } catch (error) {
       console.error("Error:",error);
-      setStatus("Server error,Please try again later .");
-      setStatusType("error");
+      toast.error("Server error. Please try again later.");
       
       
     }
@@ -209,9 +205,7 @@ const [status,setStatus]=useState("");
             Submit
           </button>
 
-          {status && (
-            <p className="text-green-600 font-medium mt-3">{status}</p>
-          )}
+          {/* Notifications use react-toastify (global ToastContainer in App.jsx) */}
         </form>
       </div>
     </div>

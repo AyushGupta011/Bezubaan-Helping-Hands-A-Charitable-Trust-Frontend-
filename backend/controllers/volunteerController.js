@@ -100,11 +100,11 @@ export const submitVolunteer = async (req, res) => {
 
     await sendMail(email,userSubject, userEmailHtml);
 
-    res.status(201).json({success:true, message: 'Volunteer form submitted successfully', volunteer });
+    return res.status(201).json({success:true, message: 'Volunteer form submitted successfully', volunteer });
 
   } catch (error) {
     console.error('Error submitting volunteer:', error);
-    res.status(500).json({
+   return res.status(500).json({
       success:false,
       message: 'Error saving volunteer',
       error: error.message || error.toString(),
@@ -115,9 +115,9 @@ export const submitVolunteer = async (req, res) => {
 export const getVolunteers = async (req, res) => {
   try {
     const volunteers = await Volunteer.find().sort({ createdAt: -1 });
-    res.json({success:true,volunteers});
+    return res.json({success:true,volunteers});
   } catch (error) {
     console.error('Failed to fetch volunteers:', error);
-    res.status(500).json({success:false, message: 'Failed to fetch volunteers', error: error.message || error.toString() });
+    return res.status(500).json({success:false, message: 'Failed to fetch volunteers', error: error.message || error.toString() });
   }
 };
