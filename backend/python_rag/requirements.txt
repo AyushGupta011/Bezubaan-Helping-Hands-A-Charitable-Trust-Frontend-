@@ -1,19 +1,14 @@
 fastapi
 uvicorn[standard]
 pydantic
-langchain
-langchain-community
-langchain-openai  # If using OpenAI
-langchain-google-vertexai # If using Gemini
-langchain-text-splitters
-chromadb
-langchain-groq
-langchain-huggingface 
-sentence-transformers
-huggingface-hub
-langchain-core
 python-dotenv
-gunicorn
-uvicorn[standard]
-pinecone
+langchain
+langchain-core
+langchain-community
+langchain-text-splitters
 langchain-pinecone
+langchain-groq
+langchain-huggingface
+huggingface-hub
+pinecone
+gunicorn

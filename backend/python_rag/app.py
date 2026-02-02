@@ -106,67 +106,45 @@ async def init_chain(app: FastAPI):
     global chain
     logger.info("🚀 Initializing Bezubaan RAG...")
 
-    # 1. Process local files for indexing
-    # root_dir = Config.get_root_dir()
-    # texts, metadatas = [], []
     
-    # if root_dir.exists():
-    #     splitter = CharacterTextSplitter(chunk_size=Config.CHUNK_SIZE, chunk_overlap=Config.CHUNK_OVERLAP)
-    #     for f in root_dir.rglob("*"):
-    #         if f.suffix in Config.ALLOWED_EXTENSIONS:
-    #             raw = f.read_text(encoding="utf8", errors="ignore")
-    #             clean = strip_jsx(raw)
-    #             for i, chunk in enumerate(splitter.split_text(clean)):
-    #                 texts.append(chunk)
-    #                 metadatas.append({"source": f.name, "chunk": i})
-    #     logger.info(f"📄 Found {len(texts)} text chunks to index.")
-    # else:
-    #     logger.warning(f"⚠️ Source directory {root_dir} not found. Skipping file indexing.")
 
-    # 2. Connect to Pinecone
-    pc = Pinecone(api_key=Config.PINECONE_API_KEY)
-    embeddings = get_embeddings()
-    
-    vectorstore = PineconeVectorStore(
-        index_name=Config.PINECONE_INDEX,
-        embedding=embeddings,
-        pinecone_api_key=Config.PINECONE_API_KEY
-    )
+    # Validate keys
+    if not Config.PINECONE_API_KEY or not Config.HUGGINGFACE_TOKEN or not Config.GROQ_API_KEY:
+        logger.error("❌ Missing API Keys! Check your .env or Render Environment Variables.")
+        # We don't raise here to allow the app to start (and fail gracefully on requests)
+        # But for RAG to work, we return early
+        yield
+        return
 
-    # 3. Add texts if any were found
-    # if texts:
-    #     vectorstore.add_texts(texts=texts, metadatas=metadatas)
-    #     logger.info("✅ Successfully uploaded chunks to Pinecone.")
+    try:
+        # 2. Connect to Pinecone
+        pc = Pinecone(api_key=Config.PINECONE_API_KEY)
+        embeddings = get_embeddings()
+        
+        vectorstore = PineconeVectorStore(
+            index_name=Config.PINECONE_INDEX,
+            embedding=embeddings,
+            pinecone_api_key=Config.PINECONE_API_KEY
+        )
 
+        # 4. Create Chain
+        prompt = PromptTemplate(
+            template=BEZUBAAN_PROMPT,
+            input_variables=["context", "chat_history", "question"]
+        )
 
-    
-    # index_name = "bezubaan-chatbot"
+        chain = ConversationalRetrievalChain.from_llm(
+            llm=get_llm(),
+            retriever=vectorstore.as_retriever(search_kwargs={"k": Config.RETRIEVAL_K}),
+            combine_docs_chain_kwargs={"prompt": prompt},
+            return_source_documents=True
+        )
 
-    # if not pc.has_index(index_name):
-    #    pc.create_index_for_model(
-    #     name=index_name,
-    #     cloud="aws",
-    #     region="us-east-1",
-    #     embed={
-    #         "model":"llama-text-embed-v2",
-    #         "field_map":{"text": "chunk_text"}
-    #     }
-    # )
+        logger.info("✅ Bezubaan RAG System Ready")
+    except Exception as e:
+        logger.error(f"❌ Failed to initialize RAG: {e}")
+        # App starts but RAG is unavailable
 
-    # 4. Create Chain
-    prompt = PromptTemplate(
-        template=BEZUBAAN_PROMPT,
-        input_variables=["context", "chat_history", "question"]
-    )
-
-    chain = ConversationalRetrievalChain.from_llm(
-        llm=get_llm(),
-        retriever=vectorstore.as_retriever(search_kwargs={"k": Config.RETRIEVAL_K}),
-        combine_docs_chain_kwargs={"prompt": prompt},
-        return_source_documents=True
-    )
-
-    logger.info("✅ Bezubaan RAG System Ready")
     yield
     logger.info("🛑 Shutting down...")
 
@@ -239,4 +217,4 @@ async def rag_chat(body: MessageIn):
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host="localhost", port=8000)
